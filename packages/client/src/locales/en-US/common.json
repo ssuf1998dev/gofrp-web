@@ -1,0 +1,9 @@
+{
+  "title": "GOFRP Client",
+  "documentation_url": "https://gofrp.org",
+  "documentation": "documentation",
+  "proxy_one": "proxy",
+  "proxy_other": "proxies",
+  "configuration_one": "configuration",
+  "configuration_other": "configurations"
+}

@@ -1,0 +1,51 @@
+{
+  "name": "gofrp-web",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@9.10.0",
+  "description": "Mordern gofrp web client.",
+  "author": "ssuf1998dev <ssuf1998dev@126.com>",
+  "license": "MIT",
+  "keywords": [],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^3.7.3",
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
+    "@types/lodash-es": "^4.17.12",
+    "@types/node": "^22.7.5",
+    "commitizen": "^4.3.1",
+    "cross-env": "^7.0.3",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^9.12.0",
+    "eslint-plugin-format": "^0.1.2",
+    "husky": "^9.1.6",
+    "lint-staged": "^15.2.10",
+    "lodash-es": "^4.17.21",
+    "typescript": "5.6.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "eslint": "$eslint"
+    },
+    "peerDependencyRules": {
+      "ignoreMissing": [
+        "typescript"
+      ]
+    }
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "lint-staged": {
+    "*.{ts,js,cjs,tsx,jsx}": "eslint --cache"
+  }
+}
