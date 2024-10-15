@@ -1,0 +1,4 @@
+{ setupWorker } from "msw/browser";
+handlers from "./handlers.civet";
+
+export default setupWorker(...handlers);

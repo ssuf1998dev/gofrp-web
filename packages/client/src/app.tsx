@@ -16,8 +16,8 @@ export default function App() {
 
   return (
     <Layout>
-      <Layout.Header className=":uno: pos-sticky top-0 z-1 h-fit justify-between px-2 pt-4 pb-0 flex flex-col items-center line-height-none">
-        <div className=":uno: flex justify-between w-full max-w-4xl mb-4">
+      <Layout.Header className=":uno: pos-sticky top-0 z-1 h-fit justify-between px-4 pt-4 pb-0 flex flex-col items-center line-height-none">
+        <div className=":uno: flex justify-between w-full max-w-4xl mb-4 [&>*]:flex-shrink-0">
           <Space>
             <Typography.Text className=":uno: font-bold text-lg">
               {t("title")}
@@ -49,7 +49,7 @@ export default function App() {
         </Tabs>
       </Layout.Header>
 
-      <Layout.Content className="max-w-4xl w-full mx-auto py-4">
+      <Layout.Content className="max-w-4xl w-full mx-auto py-4 max-[56rem]:px-4">
         <Outlet></Outlet>
       </Layout.Content>
     </Layout>

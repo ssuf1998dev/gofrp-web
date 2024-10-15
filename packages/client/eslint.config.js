@@ -13,6 +13,8 @@ export default antfu(
     rules: {
       "ts/no-unused-expressions": ["error", { allowShortCircuit: true, allowTernary: true }],
       "perfectionist/sort-imports": ["error", { newlinesBetween: "always" }],
+      "eslint-comments/no-unlimited-disable": "off",
+      "node/prefer-global/process": "off",
     },
   },
 );
