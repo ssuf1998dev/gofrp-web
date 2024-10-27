@@ -5,7 +5,7 @@ import { RouterProvider } from "react-router-dom";
 import "uno.css";
 
 import "./locales";
-import mocks from "./mocks/index.civet";
+import mocks from "./mocks";
 import router from "./router";
 import * as theme from "./theme";
 

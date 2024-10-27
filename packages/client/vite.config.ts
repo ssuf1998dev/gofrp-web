@@ -1,4 +1,3 @@
-import civet from "@danielx/civet/vite";
 import replace from "@rollup/plugin-replace";
 import react from "@vitejs/plugin-react";
 import unocss from "unocss/vite";
@@ -8,10 +7,6 @@ import { nodePolyfills } from "vite-plugin-node-polyfills";
 
 export default defineConfig(({ mode }) => ({
   plugins: [
-    civet({
-      implicitExtension: false,
-      ts: "civet",
-    }),
     unocss(),
     react({
       babel: {
