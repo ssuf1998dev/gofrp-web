@@ -4,5 +4,5 @@ export default async () => {
   }
 
   const { default: worker } = await import("./worker");
-  return worker.start();
+  return worker.start({ quiet: true, onUnhandledRequest: "bypass" });
 };

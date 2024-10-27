@@ -1,5 +1,9 @@
+import { capitalCase, sentenceCase } from "change-case";
 import i18n from "i18next";
+import LanguageDetector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
+
+import languages from "./languages.json";
 
 const translateModules = import.meta.glob("./*/*.json", {
   eager: true,
@@ -13,7 +17,7 @@ const resources = Object.entries(translateModules)
   })
   .reduce((map: Record<string, any>, entry) => {
     if (!Object.hasOwn(map, entry[0]))
-      map[entry[0]] = {};
+      map[entry[0]] = { languages };
 
     Object.assign(map[entry[0]], entry[1]);
     return map;
@@ -22,25 +26,27 @@ const resources = Object.entries(translateModules)
 // "common" // Things that are reused everywhere, like "Confirm" and "Cancel" on buttons
 // "validation" // All validation text, like "email address not valid" in a form
 // "glossary" // Words we want to be reused consistently, like key words in your app
-void i18n.use(initReactI18next).init({
+void i18n.use(initReactI18next).use(LanguageDetector).init({
   resources,
-  lng: "en-US",
+  fallbackLng: "en-US",
+  supportedLngs: Object.keys(resources),
   defaultNS: "common",
   nsSeparator: ".",
   keySeparator: false,
   interpolation: {
     escapeValue: false,
-    defaultVariables: {
-      what: "",
-      key: "",
-      src: "",
-      tgt: "",
-      reason: "",
-    },
+    defaultVariables: { what: "", key: "", src: "", tgt: "", reason: "" },
+  },
+  detection: {
+    order: ["localStorage", "sessionStorage", "navigator"],
+    lookupSessionStorage: "lng",
+    lookupLocalStorage: "lng",
   },
 }).then(() => {
   const { formatter } = i18n.services;
   if (formatter) {
+    formatter.add("capitalCase", (value: string) => capitalCase(value));
+    formatter.add("sentenceCase", (value: string) => sentenceCase(value));
     formatter.add("heading", (value: string, _, options) => {
       return !value ? "" : `${options.char || " "}${value}`;
     });

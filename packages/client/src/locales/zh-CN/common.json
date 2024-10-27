@@ -1,1 +1,9 @@
-{}
+{
+  "title": "GOFRP客户端",
+  "documentation_url": "https://gofrp.org",
+  "documentation": "文档",
+  "proxy_one": "代理",
+  "proxy_other": "代理",
+  "configuration_one": "配置",
+  "configuration_other": "配置"
+}
