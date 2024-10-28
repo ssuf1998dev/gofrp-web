@@ -4,13 +4,14 @@ import { z } from "zod";
 const proxyStatus = z.object({
   name: z.string(),
   type: z.string(),
-  status: z.string(),
+  status: z.enum(["new", "wait start", "start error", "running", "check failed", "closed"]),
   err: z.string().nullish(),
   local_addr: z.string(),
   remote_addr: z.string(),
   plugin: z.string().nullish(),
 });
 
+/** @link https://github.com/fatedier/frp/blob/master/client/admin_api.go#L71 */
 export const reloadServer = makeEndpoint({
   method: "get",
   path: "/reload",
@@ -18,6 +19,7 @@ export const reloadServer = makeEndpoint({
   response: z.string().nullish(),
 });
 
+/** @link https://github.com/fatedier/frp/blob/master/client/admin_api.go#L112 */
 export const stopServer = makeEndpoint({
   method: "post",
   path: "/stop",
@@ -25,6 +27,7 @@ export const stopServer = makeEndpoint({
   response: z.string().nullish(),
 });
 
+/** @link https://github.com/fatedier/frp/blob/master/client/admin_api.go#L162 */
 export const getStatus = makeEndpoint({
   method: "get",
   path: "/status",
@@ -32,6 +35,7 @@ export const getStatus = makeEndpoint({
   response: z.record(z.string(), proxyStatus.array()),
 });
 
+/** @link https://github.com/fatedier/frp/blob/master/client/admin_api.go#L198 */
 export const getConfig = makeEndpoint({
   method: "get",
   path: "/config",
@@ -39,6 +43,7 @@ export const getConfig = makeEndpoint({
   response: z.string(),
 });
 
+/** @link https://github.com/fatedier/frp/blob/master/client/admin_api.go#L228 */
 export const setConfig = makeEndpoint({
   method: "put",
   path: "/config",

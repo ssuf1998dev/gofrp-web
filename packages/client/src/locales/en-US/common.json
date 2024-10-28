@@ -5,5 +5,17 @@
   "proxy_one": "proxy",
   "proxy_other": "proxies",
   "configuration_one": "configuration",
-  "configuration_other": "configurations"
+  "configuration_other": "configurations",
+  "name": "name",
+  "type": "type",
+  "status": "status",
+  "local_addr": "local address",
+  "remote_addr": "remote address",
+  "plugin": "plugin",
+  "status_new": "new",
+  "status_wait_start": "starting",
+  "status_start_error": "start failed",
+  "status_running": "running",
+  "status_check_failed": "check failed",
+  "status_closed": "closed"
 }

@@ -16,7 +16,7 @@ export default function App() {
 
   return (
     <>
-      <Flex direction="column" className=":uno: bg-[var(--accent-2)] [&_nav]:(mx-auto w-full min-w-2xl max-w-5xl)">
+      <Flex direction="column" className=":uno: bg-[var(--accent-2)] [&_nav]:(mx-auto w-full min-w-2xl max-w-5xl) pos-sticky top-0 z-1">
         <Flex gap="2" align="center" className=":uno: p-4 pt-6 pb-8 mx-auto w-full min-w-2xl max-w-5xl">
           <Text className=":uno: font-bold text-xl">{t("title")}</Text>
           <span className=":uno: flex-grow-1" />
@@ -54,7 +54,7 @@ export default function App() {
         </TabNav.Root>
       </Flex>
 
-      <div className=":uno: px-4 py-2 mx-auto w-full min-w-2xl max-w-5xl box-border">
+      <div className=":uno: px-4 pt-6 pb-8 mx-auto w-full min-w-2xl max-w-5xl box-border">
         <Outlet />
       </div>
     </>

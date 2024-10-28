@@ -5,5 +5,17 @@
   "proxy_one": "代理",
   "proxy_other": "代理",
   "configuration_one": "配置",
-  "configuration_other": "配置"
+  "configuration_other": "配置",
+  "name": "名称",
+  "type": "类型",
+  "status": "状态",
+  "local_addr": "本地地址",
+  "remote_addr": "远程地址",
+  "plugin": "插件",
+  "status_new": "新建",
+  "status_wait_start": "启动中",
+  "status_start_error": "启动失败",
+  "status_running": "运行中",
+  "status_check_failed": "校验失败",
+  "status_closed": "已关闭"
 }

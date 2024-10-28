@@ -310,6 +310,13 @@ body,
 }
 
 .rt-Link,
-.rt-Button {
+.rt-Button,
+.rt-IconButton {
   cursor: pointer;
+}
+
+.rt-Link[disabled],
+.rt-Button[disabled],
+.rt-IconButton[disabled] {
+  cursor: not-allowed;
 }
