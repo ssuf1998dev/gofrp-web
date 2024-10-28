@@ -1,6 +1,10 @@
+import type { ComponentRef } from "react";
+
 import { Button, DropdownMenu, Flex, Link as RadixLink, TabNav, Text } from "@radix-ui/themes";
+import { useDebouncedCallback } from "@react-hookz/web";
 import IconTablerLanguage from "~icons/tabler/language";
-import { useEffect, useMemo } from "react";
+import clsx from "clsx";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, Outlet, useMatches, useNavigate } from "react-router-dom";
 
@@ -14,9 +18,30 @@ export default function App() {
     ["/"].includes(currentMatch?.pathname ?? "/") && nav("proxies", { replace: true });
   }, [currentMatch?.pathname, nav]);
 
+  const [headerElevate, setHeaderElevate] = useState(false);
+  const headerRef = useRef<ComponentRef<typeof Flex>>(null);
+  const headerEffect = useDebouncedCallback(() => {
+    const el = headerRef.current?.parentElement;
+    setHeaderElevate(!!el?.scrollTop);
+  }, [], 16.7);
+  useEffect(() => {
+    const el = headerRef.current?.parentElement;
+    el?.addEventListener("scroll", headerEffect);
+    return () => {
+      el?.removeEventListener("scroll", headerEffect);
+    };
+  }, [headerEffect]);
+
   return (
     <>
-      <Flex direction="column" className=":uno: bg-[var(--accent-2)] [&_nav]:(mx-auto w-full min-w-2xl max-w-5xl) pos-sticky top-0 z-1">
+      <Flex
+        direction="column"
+        className={clsx(
+          ":uno: bg-[var(--accent-2)] [&_nav]:(mx-auto w-full min-w-2xl max-w-5xl) pos-sticky top-0 z-1 transition-shadow",
+          { ":uno: shadow-[var(--shadow-3)]": headerElevate },
+        )}
+        ref={headerRef}
+      >
         <Flex gap="2" align="center" className=":uno: p-4 pt-6 pb-8 mx-auto w-full min-w-2xl max-w-5xl">
           <Text className=":uno: font-bold text-xl">{t("title")}</Text>
           <span className=":uno: flex-grow-1" />
