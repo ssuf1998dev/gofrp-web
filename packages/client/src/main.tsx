@@ -12,7 +12,7 @@ import "./theme.css";
 
 mocks().then(() => {
   createRoot(document.getElementById("root")!).render(
-    <Theme accentColor="teal" className=":uno: overflow-auto min-w-2xl min-h-unset h-full">
+    <Theme accentColor="teal" className=":uno: overflow-hidden min-w-2xl min-h-unset h-full">
       <RouterProvider router={router} />
     </Theme>,
   );

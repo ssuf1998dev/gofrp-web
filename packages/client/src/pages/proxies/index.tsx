@@ -23,7 +23,7 @@ export default function Proxies() {
   });
 
   return (
-    <Flex direction="column" gap="4">
+    <Flex direction="column" gap="4" className="h-full">
       <Flex>
         <span className=":uno: flex-grow-1" />
         <IconButton
