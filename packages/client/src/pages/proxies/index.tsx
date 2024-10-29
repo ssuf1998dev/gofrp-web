@@ -8,6 +8,7 @@ import clsx from "clsx";
 import { useTranslation } from "react-i18next";
 
 import apis from "../../apis";
+import ComplexSearch from "../../components/complex-search";
 
 export default function Proxies() {
   const { t } = useTranslation();
@@ -25,6 +26,7 @@ export default function Proxies() {
   return (
     <Flex direction="column" gap="4" className="h-full">
       <Flex>
+        <ComplexSearch />
         <span className=":uno: flex-grow-1" />
         <IconButton
           variant="surface"

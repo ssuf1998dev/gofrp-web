@@ -19,5 +19,6 @@
   "status_check_failed": "check failed",
   "status_closed": "closed",
   "item_count_one": "{{count}} item",
-  "item_count_other": "{{count}} items"
+  "item_count_other": "{{count}} items",
+  "empty": "empty"
 }

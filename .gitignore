@@ -32,3 +32,5 @@ tmp
 coverage
 
 vite.config.ts.timestamp*
+
+*storybook.log
