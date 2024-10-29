@@ -17,5 +17,7 @@
   "status_start_error": "start failed",
   "status_running": "running",
   "status_check_failed": "check failed",
-  "status_closed": "closed"
+  "status_closed": "closed",
+  "item_count_one": "{{count}} item",
+  "item_count_other": "{{count}} items"
 }

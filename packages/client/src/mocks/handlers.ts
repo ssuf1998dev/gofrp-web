@@ -10,7 +10,7 @@ const db = {
       local_addr: faker.internet.url(),
       remote_addr: faker.internet.url(),
       plugin: faker.string.alpha(10),
-    }), { count: 35 }),
+    }), { count: { min: 10, max: 35 } }),
   },
 };
 

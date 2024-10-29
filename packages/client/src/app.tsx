@@ -18,9 +18,9 @@ export default function App() {
     <Grid columns="1" rows="auto minmax(0, 1fr)" className=":uno: h-full">
       <Flex
         direction="column"
-        className=":uno: bg-[var(--accent-2)] [&_nav]:(mx-auto w-full min-w-2xl max-w-5xl)"
+        className=":uno: bg-[var(--accent-2)] [&_nav]:(mx-a w-full min-w-2xl max-w-5xl)"
       >
-        <Flex gap="2" align="center" className=":uno: p-4 pt-6 pb-8 mx-auto w-full min-w-2xl max-w-5xl">
+        <Flex gap="2" align="center" className=":uno: p-4 pt-6 pb-8 mx-a w-full min-w-2xl max-w-5xl">
           <Text className=":uno: font-bold text-xl">{t("title")}</Text>
           <span className=":uno: flex-grow-1" />
           <RadixLink size="2" href={t("documentation_url")} target="_blank" rel="noopener,noreferrer">
@@ -57,7 +57,7 @@ export default function App() {
         </TabNav.Root>
       </Flex>
 
-      <div className=":uno: px-4 pt-6 pb-8 mx-auto w-full min-w-2xl max-w-5xl box-border">
+      <div className=":uno: px-4 pt-6 pb-8 mx-a w-full min-w-2xl max-w-5xl box-border">
         <Outlet />
       </div>
     </Grid>

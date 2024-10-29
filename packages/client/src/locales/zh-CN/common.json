@@ -17,5 +17,7 @@
   "status_start_error": "启动失败",
   "status_running": "运行中",
   "status_check_failed": "校验失败",
-  "status_closed": "已关闭"
+  "status_closed": "已关闭",
+  "item_count_one": "{{count}}项",
+  "item_count_other": "{{count}}项"
 }

@@ -1,6 +1,6 @@
 import type { BadgeProps } from "@radix-ui/themes";
 
-import { Badge, Flex, IconButton, Spinner, Table } from "@radix-ui/themes";
+import { Badge, Flex, IconButton, Spinner, Table, Text } from "@radix-ui/themes";
 import { useAsync, useMountEffect } from "@react-hookz/web";
 import IconTablerRefresh from "~icons/tabler/refresh";
 import { snakeCase } from "change-case";
@@ -81,6 +81,9 @@ export default function Proxies() {
             ))}
           </Table.Body>
         </Table.Root>
+        <Text size="2" className="ml-a color-[var(--gray-indicator)]">
+          {t("formatting.capital_case", { value: t("item_count", { count: $list[0].result.length }) })}
+        </Text>
       </Spinner>
     </Flex>
   );
