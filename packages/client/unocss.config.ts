@@ -8,7 +8,4 @@ export default defineConfig({
   presets: [
     presetUno(),
   ],
-  rules: [
-    ["content-fine-empty", { content: "\"--\"" }],
-  ],
 });

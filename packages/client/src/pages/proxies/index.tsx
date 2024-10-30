@@ -82,7 +82,7 @@ export default function Proxies() {
               ))}
             </Table.Row>
           </Table.Header>
-          <Table.Body className=":uno: [&_.rt-TableCell:empty]:after:content-fine-empty">
+          <Table.Body className=":uno: [&_.rt-TableCell:empty]:after:content-[--empty-indicator]">
             {$list[0].result.map((item, idx) => (
               // eslint-disable-next-line react/no-array-index-key
               <Table.Row key={idx}>
@@ -111,7 +111,7 @@ export default function Proxies() {
             ))}
           </Table.Body>
         </Table.Root>
-        <Text size="2" className="ml-a color-[var(--gray-indicator)]">
+        <Text size="2" className="ml-a color-[--gray-indicator]">
           {t("formatting.capital_case", { value: t("item_count", { count: $list[0].result.length }) })}
         </Text>
       </Spinner>

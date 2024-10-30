@@ -303,6 +303,10 @@
   --color-background: #111;
 }
 
+#root {
+  --empty-indicator: "--";
+}
+
 html,
 body,
 #root {

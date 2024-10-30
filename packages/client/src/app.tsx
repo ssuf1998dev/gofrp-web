@@ -18,7 +18,7 @@ export default function App() {
     <Grid columns="1" rows="auto minmax(0, 1fr)" className=":uno: h-full">
       <Flex
         direction="column"
-        className=":uno: bg-[var(--accent-2)] [&_nav]:(mx-a w-full min-w-2xl max-w-5xl)"
+        className=":uno: bg-[--accent-2] [&_nav]:(mx-a w-full min-w-2xl max-w-5xl)"
       >
         <Flex gap="2" align="center" className=":uno: p-4 pt-6 pb-8 mx-a w-full min-w-2xl max-w-5xl">
           <Text className=":uno: font-bold text-xl">{t("title")}</Text>

@@ -12,7 +12,7 @@ function SelectItemWhenEmpty() {
   return (
     <Select.Item
       value="<empty>"
-      className=":uno: pointer-events-none bg-[unset]! color-[var(--gray-a8)] [&_.rt-SelectItemIndicator]:opacity-0"
+      className=":uno: pointer-events-none bg-[unset]! color-[--gray-a8] [&_.rt-SelectItemIndicator]:opacity-0"
     >
       {t("formatting.capital_case", { value: t("empty") })}
     </Select.Item>
@@ -24,7 +24,7 @@ function UnSelectableSelectItem() {
   return (
     <Select.Item
       value="<unselect>"
-      className=":uno: not-[[data-highlighted]]:color-[var(--gray-a8)] [&_.rt-SelectItemIndicator]:opacity-0"
+      className=":uno: not-[[data-highlighted]]:color-[--gray-a8] [&_.rt-SelectItemIndicator]:opacity-0"
     >
       {t("formatting.capital_case", { value: t("unselect") })}
     </Select.Item>
