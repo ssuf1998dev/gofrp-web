@@ -1,10 +1,11 @@
 import type { BadgeProps } from "@radix-ui/themes";
 
-import { Badge, Flex, IconButton, Spinner, Table, Text } from "@radix-ui/themes";
+import { Badge, Flex, IconButton, Select, Spinner, Table, Text } from "@radix-ui/themes";
 import { useAsync, useMountEffect } from "@react-hookz/web";
 import IconTablerRefresh from "~icons/tabler/refresh";
 import { snakeCase } from "change-case";
 import clsx from "clsx";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import apis from "../../apis";
@@ -12,6 +13,8 @@ import ComplexSearch from "../../components/complex-search";
 
 export default function Proxies() {
   const { t } = useTranslation();
+
+  const [searched, setSearched] = useState<Record<string, any>>({ name: "", type: "" });
 
   const $list = useAsync(
     async () =>
@@ -26,7 +29,32 @@ export default function Proxies() {
   return (
     <Flex direction="column" gap="4" className="h-full">
       <Flex>
-        <ComplexSearch />
+        <ComplexSearch
+          value={searched}
+          onChange={setSearched}
+          onSubmit={() => {}}
+          disabled={$list[0].status === "loading"}
+          selectItems={[
+            <Select.Item key="name" value="name">
+              {t("formatting.capital_case", { value: t("name") })}
+            </Select.Item>,
+            <Select.Item key="type" value="type">
+              {t("formatting.capital_case", { value: t("type") })}
+            </Select.Item>,
+          ]}
+          types={{
+            name: { type: "text" },
+            type: {
+              type: "select",
+              inputProps: { unselectable: true },
+              selectItems: ["new", "wait start", "start error", "running", "check failed", "closed"].map(item => (
+                <Select.Item key={item} value={item}>
+                  {t("formatting.sentence_case", { value: t(snakeCase(`status_${item}`)) })}
+                </Select.Item>
+              )),
+            },
+          }}
+        />
         <span className=":uno: flex-grow-1" />
         <IconButton
           variant="surface"

@@ -1,3 +1,5 @@
+import type { ButtonProps } from "@radix-ui/themes";
+
 import { Button, Flex, Select, TextField } from "@radix-ui/themes";
 import { useMountEffect } from "@react-hookz/web";
 import IconTablerSearch from "~icons/tabler/search";
@@ -17,12 +19,24 @@ function SelectItemWhenEmpty() {
   );
 }
 
+function UnSelectableSelectItem() {
+  const { t } = useTranslation();
+  return (
+    <Select.Item
+      value="<unselect>"
+      className=":uno: not-[[data-highlighted]]:color-[var(--gray-a8)] [&_.rt-SelectItemIndicator]:opacity-0"
+    >
+      {t("formatting.capital_case", { value: t("unselect") })}
+    </Select.Item>
+  );
+}
+
 type TypeItem = {
   type: "text";
   inputProps?: Omit<TextField.RootProps, "value" | "onChange">;
 } | {
   type: "select";
-  inputProps?: Omit<Select.RootProps, "value" | "onValueChange"> & { className?: string };
+  inputProps?: Omit<Select.RootProps, "value" | "onValueChange"> & { className?: string; unselectable?: boolean };
   selectItems?: ReactElement[];
   selectContentProps?: Select.ContentProps;
 };
@@ -30,13 +44,27 @@ interface ComplexSearchProps {
   selectProps?: Omit<Select.RootProps, "value" | "onValueChange"> & { className?: string };
   selectContentProps?: Select.ContentProps;
   selectItems?: ReactElement[];
+  submitButtonProps?: ButtonProps;
   types?: Record<string, TypeItem>;
 
   value?: Record<string, any>;
-  onChange?: (value: Required<ComplexSearchProps>["value"]) => void;
+  onChange?: (value: Required<ComplexSearchProps>["value"], changes: string[]) => void;
+  onSubmit?: (value: Required<ComplexSearchProps>["value"]) => void;
+  disabled?: boolean;
 };
 export default function ComplexSearch(props: ComplexSearchProps) {
-  const { selectProps, selectContentProps, selectItems, types, value, onChange } = props;
+  const {
+    selectProps,
+    selectContentProps,
+    selectItems,
+    submitButtonProps,
+    types,
+
+    value,
+    onChange,
+    onSubmit,
+    disabled,
+  } = props;
 
   const [selected, setSelected] = useState<string>((selectItems ?? [])[0]?.props?.value);
   const currentType = useMemo(
@@ -52,10 +80,12 @@ export default function ComplexSearch(props: ComplexSearchProps) {
   );
 
   useMountEffect(() => {
-    onChange?.((selectItems ?? []).reduce((map: Record<string, any>, curr) => {
+    const changedValues = (selectItems ?? []).reduce((map: Record<string, any>, curr) => {
       curr.props?.value && (map[curr.props.value] = "");
       return map;
-    }, {}));
+    }, {});
+    onChange?.(changedValues, Object.keys(changedValues),
+    );
   });
 
   const inputNode = useMemo(() => {
@@ -64,16 +94,24 @@ export default function ComplexSearch(props: ComplexSearchProps) {
         <TextField.Root
           {...currentType.inputProps}
           className={clsx(
-            ":uno: rounded-none border-l-transparent min-w-78 mx-[-1px] [clip-path:inset(0_1px_0_1px)] has-[:focus]:[clip-path:none] has-[:focus]:z-1",
+            ":uno: rounded-none border-l-transparent min-w-64 mx-[-1px] [clip-path:inset(0_1px_0_1px)] has-[:focus]:[clip-path:none] has-[:focus]:z-1",
             currentType.inputProps?.className,
           )}
+          disabled={currentType.inputProps?.disabled || disabled}
           value={(value ?? searched)[selected]}
           onChange={(evt) => {
             if (onChange) {
-              onChange({ ...value, [selected]: evt.target.value });
+              onChange({ ...value, [selected]: evt.target.value }, [selected]);
               return;
             }
             setSearched(old => ({ ...old, [selected]: evt.target.value }));
+          }}
+          onKeyUp={(evt) => {
+            if (evt.key === "Enter") {
+              evt.preventDefault();
+              onSubmit?.(value ?? {});
+            }
+            currentType.inputProps?.onKeyUp?.(evt);
           }}
         />
       );
@@ -85,20 +123,30 @@ export default function ComplexSearch(props: ComplexSearchProps) {
           {...currentType.inputProps}
           value={(value ?? searched)[selected]}
           onValueChange={(selectValue) => {
+            const finalSelectValue = selectValue === "<unselect>" ? "" : selectValue;
             if (onChange) {
-              onChange({ ...value, [selected]: selectValue });
+              onChange({ ...value, [selected]: finalSelectValue }, [selected]);
               return;
             }
-            setSearched(old => ({ ...old, [selected]: selectValue }));
+            setSearched(old => ({ ...old, [selected]: finalSelectValue }));
           }}
+          disabled={currentType.inputProps?.disabled || disabled}
         >
-          <Select.Trigger className={clsx(
-            ":uno: rounded-none border-l-transparent min-w-78 mx-[-1px]",
-            ":uno: [clip-path:inset(0_1px_0_1px)] focus:[clip-path:none] focus:z-1",
-            currentType.inputProps?.className,
-          )}
+          <Select.Trigger
+            className={clsx(
+              ":uno: rounded-none border-l-transparent min-w-64 mx-[-1px]",
+              ":uno: [clip-path:inset(0_1px_0_1px)] focus:[clip-path:none] focus:z-1",
+              currentType.inputProps?.className,
+            )}
+            onKeyUp={(evt) => {
+              if (evt.key === "Enter") {
+                evt.preventDefault();
+                onSubmit?.(value ?? {});
+              }
+            }}
           />
           <Select.Content {...currentType.selectContentProps}>
+            {(value ?? searched)[selected] && currentType.inputProps?.unselectable ? <UnSelectableSelectItem /> : null}
             {currentType.selectItems ?? <SelectItemWhenEmpty />}
           </Select.Content>
         </Select.Root>
@@ -106,7 +154,7 @@ export default function ComplexSearch(props: ComplexSearchProps) {
     }
 
     return null;
-  }, [currentType, searched, selected, value, onChange]);
+  }, [currentType, searched, selected, value, onChange, onSubmit, disabled]);
 
   return (
     <Flex>
@@ -116,11 +164,13 @@ export default function ComplexSearch(props: ComplexSearchProps) {
         onValueChange={(value) => {
           setSelected(value);
         }}
+        disabled={selectProps?.disabled || disabled}
       >
-        <Select.Trigger className={clsx(
-          ":uno: rounded-r-none min-w-22 focus-z-1",
-          selectProps?.className,
-        )}
+        <Select.Trigger
+          className={clsx(
+            ":uno: rounded-r-none min-w-30 focus-z-1",
+            selectProps?.className,
+          )}
         />
         <Select.Content {...selectContentProps}>
           {selectItems ?? <SelectItemWhenEmpty />}
@@ -129,7 +179,19 @@ export default function ComplexSearch(props: ComplexSearchProps) {
 
       {inputNode}
 
-      <Button variant="surface" className="rounded-l-none focus-z-1">
+      <Button
+        {...submitButtonProps}
+        variant="surface"
+        className={clsx(
+          ":uno: rounded-l-none focus-z-1",
+          submitButtonProps?.className,
+        )}
+        onClick={(evt) => {
+          onSubmit?.(value ?? {});
+          submitButtonProps?.onClick?.(evt);
+        }}
+        disabled={submitButtonProps?.disabled || disabled}
+      >
         <IconTablerSearch />
       </Button>
     </Flex>
