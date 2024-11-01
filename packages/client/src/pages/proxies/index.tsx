@@ -1,6 +1,6 @@
 import type { BadgeProps } from "@radix-ui/themes";
 
-import { Badge, Button, ContextMenu, Flex, IconButton, Select, Spinner, Table, Text } from "@radix-ui/themes";
+import { Badge, Button, ContextMenu, Flex, IconButton, Select, Spinner, Table, Text, Tooltip } from "@radix-ui/themes";
 import { useAsync, useMountEffect } from "@react-hookz/web";
 import IconTablerCirclePlus from "~icons/tabler/circle-plus";
 import IconTablerEdit from "~icons/tabler/edit";
@@ -102,19 +102,28 @@ export default function Proxies() {
                   <Table.Row>
                     {(["name", "type", "status", "local_addr", "remote_addr", "plugin"] as Array<keyof typeof item>).map((key) => {
                       if (key === "status") {
+                        const node = (
+                          <Badge color={({
+                            "new": "blue",
+                            "wait start": "orange",
+                            "start error": "red",
+                            "running": "green",
+                            "check failed": "red",
+                            "closed": "gray",
+                          } satisfies Record<typeof item["status"], BadgeProps["color"]>)[item[key]]}
+                          >
+                            {t("formatting.sentence_case", { value: t(snakeCase(`status_${item[key]}`)) })}
+                          </Badge>
+                        );
                         return (
                           <Table.Cell key={key}>
-                            <Badge color={({
-                              "new": "blue",
-                              "wait start": "orange",
-                              "start error": "red",
-                              "running": "green",
-                              "check failed": "red",
-                              "closed": "gray",
-                            } satisfies Record<typeof item["status"], BadgeProps["color"]>)[item[key]]}
-                            >
-                              {t("formatting.sentence_case", { value: t(snakeCase(`status_${item[key]}`)) })}
-                            </Badge>
+                            {item.err
+                              ? (
+                                  <Tooltip content={item.err}>
+                                    {node}
+                                  </Tooltip>
+                                )
+                              : node}
                           </Table.Cell>
                         );
                       }
