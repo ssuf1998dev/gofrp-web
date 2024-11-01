@@ -21,5 +21,8 @@
   "item_count_one": "{{count}} item",
   "item_count_other": "{{count}} items",
   "empty": "empty",
-  "unselect": "unselect"
+  "unselect": "unselect",
+  "create": "create {{what}}",
+  "edit": "edit {{what}}",
+  "delete": "delete {{what}}"
 }

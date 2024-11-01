@@ -1,8 +1,11 @@
 import type { BadgeProps } from "@radix-ui/themes";
 
-import { Badge, Flex, IconButton, Select, Spinner, Table, Text } from "@radix-ui/themes";
+import { Badge, Button, ContextMenu, Flex, IconButton, Select, Spinner, Table, Text } from "@radix-ui/themes";
 import { useAsync, useMountEffect } from "@react-hookz/web";
+import IconTablerCirclePlus from "~icons/tabler/circle-plus";
+import IconTablerEdit from "~icons/tabler/edit";
 import IconTablerRefresh from "~icons/tabler/refresh";
+import IconTablerTrash from "~icons/tabler/trash";
 import { snakeCase } from "change-case";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -37,7 +40,7 @@ export default function Proxies() {
 
   return (
     <Flex direction="column" gap="4" className="h-full">
-      <Flex>
+      <Flex gap="2">
         <ComplexSearch
           value={searched}
           onChange={setSearched}
@@ -64,6 +67,10 @@ export default function Proxies() {
           }}
         />
         <span className=":uno: flex-grow-1" />
+        <Button>
+          <IconTablerCirclePlus />
+          {t("formatting.sentence_case", { value: t("create", { what: t("proxy", { count: 1 }) }) })}
+        </Button>
         <IconButton
           variant="surface"
           onClick={() => {
@@ -90,29 +97,53 @@ export default function Proxies() {
           <Table.Body className=":uno: [&_.rt-TableCell:empty]:after:content-[--empty-indicator]">
             {list.map((item, idx) => (
               // eslint-disable-next-line react/no-array-index-key
-              <Table.Row key={idx}>
-                {(["name", "type", "status", "local_addr", "remote_addr", "plugin"] as Array<keyof typeof item>).map((key) => {
-                  if (key === "status") {
-                    return (
-                      <Table.Cell key={key}>
-                        <Badge color={({
-                          "new": "blue",
-                          "wait start": "orange",
-                          "start error": "red",
-                          "running": "green",
-                          "check failed": "red",
-                          "closed": "gray",
-                        } satisfies Record<typeof item["status"], BadgeProps["color"]>)[item[key]]}
-                        >
-                          {t("formatting.sentence_case", { value: t(snakeCase(`status_${item[key]}`)) })}
-                        </Badge>
-                      </Table.Cell>
-                    );
-                  }
+              <ContextMenu.Root key={idx}>
+                <ContextMenu.Trigger>
+                  <Table.Row>
+                    {(["name", "type", "status", "local_addr", "remote_addr", "plugin"] as Array<keyof typeof item>).map((key) => {
+                      if (key === "status") {
+                        return (
+                          <Table.Cell key={key}>
+                            <Badge color={({
+                              "new": "blue",
+                              "wait start": "orange",
+                              "start error": "red",
+                              "running": "green",
+                              "check failed": "red",
+                              "closed": "gray",
+                            } satisfies Record<typeof item["status"], BadgeProps["color"]>)[item[key]]}
+                            >
+                              {t("formatting.sentence_case", { value: t(snakeCase(`status_${item[key]}`)) })}
+                            </Badge>
+                          </Table.Cell>
+                        );
+                      }
 
-                  return <Table.Cell key={key}>{item[key]}</Table.Cell>;
-                })}
-              </Table.Row>
+                      return <Table.Cell key={key}>{item[key]}</Table.Cell>;
+                    })}
+                  </Table.Row>
+                </ContextMenu.Trigger>
+                <ContextMenu.Content>
+                  {item.name
+                    ? (
+                        <>
+                          <ContextMenu.Item className=":uno: pointer-events-none bg-[unset]! color-[--gray-a8]">
+                            {item.name}
+                          </ContextMenu.Item>
+                          <ContextMenu.Separator />
+                        </>
+                      )
+                    : null}
+                  <ContextMenu.Item>
+                    <IconTablerEdit />
+                    {t("formatting.sentence_case", { value: t("edit") })}
+                  </ContextMenu.Item>
+                  <ContextMenu.Item color="red">
+                    <IconTablerTrash />
+                    {t("formatting.sentence_case", { value: t("delete") })}
+                  </ContextMenu.Item>
+                </ContextMenu.Content>
+              </ContextMenu.Root>
             ))}
             {!list.length ? <TableEmpty /> : null}
           </Table.Body>
