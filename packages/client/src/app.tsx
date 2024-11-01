@@ -3,6 +3,7 @@ import IconTablerLanguage from "~icons/tabler/language";
 import { useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, Outlet, useMatches, useNavigate } from "react-router-dom";
+import { useHead } from "unhead";
 
 export default function App() {
   const { t, i18n } = useTranslation();
@@ -13,6 +14,8 @@ export default function App() {
   useEffect(() => {
     ["/"].includes(currentMatch?.pathname ?? "/") && nav("proxies", { replace: true });
   }, [currentMatch?.pathname, nav]);
+
+  useHead({ title: t("title") });
 
   return (
     <Grid columns="1" rows="auto minmax(0, 1fr)" className=":uno: h-full">

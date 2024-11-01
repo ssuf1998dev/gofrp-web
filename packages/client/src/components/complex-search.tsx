@@ -94,7 +94,11 @@ export default function ComplexSearch(props: ComplexSearchProps) {
         <TextField.Root
           {...currentType.inputProps}
           className={clsx(
-            ":uno: rounded-none border-l-transparent min-w-64 mx-[-1px] [clip-path:inset(0_1px_0_1px)] has-[:focus]:[clip-path:none] has-[:focus]:z-1",
+            ":uno: rounded-l-none border-l-transparent mx-[-1px] has-[:focus]:[clip-path:none] has-[:focus]:z-1",
+            {
+              ":uno: rounded-r-none min-w-64 [clip-path:inset(0_1px_0_1px)]": !!onSubmit,
+              ":uno: min-w-72 [clip-path:inset(0_0_0_1px)]": !onSubmit,
+            },
             currentType.inputProps?.className,
           )}
           disabled={currentType.inputProps?.disabled || disabled}
@@ -107,9 +111,9 @@ export default function ComplexSearch(props: ComplexSearchProps) {
             setSearched(old => ({ ...old, [selected]: evt.target.value }));
           }}
           onKeyUp={(evt) => {
-            if (evt.key === "Enter") {
+            if (onSubmit && evt.key === "Enter") {
               evt.preventDefault();
-              onSubmit?.(value ?? {});
+              onSubmit(value ?? {});
             }
             currentType.inputProps?.onKeyUp?.(evt);
           }}
@@ -134,14 +138,17 @@ export default function ComplexSearch(props: ComplexSearchProps) {
         >
           <Select.Trigger
             className={clsx(
-              ":uno: rounded-none border-l-transparent min-w-64 mx-[-1px]",
-              ":uno: [clip-path:inset(0_1px_0_1px)] focus:[clip-path:none] focus:z-1",
+              ":uno: rounded-l-none border-l-transparent mx-[-1px] focus:z-1 focus:[clip-path:none]",
+              {
+                ":uno: rounded-r-none min-w-64 [clip-path:inset(0_1px_0_1px)]": !!onSubmit,
+                ":uno: min-w-72 [clip-path:inset(0_0_0_1px)]": !onSubmit,
+              },
               currentType.inputProps?.className,
             )}
             onKeyUp={(evt) => {
-              if (evt.key === "Enter") {
+              if (onSubmit && evt.key === "Enter") {
                 evt.preventDefault();
-                onSubmit?.(value ?? {});
+                onSubmit(value ?? {});
               }
             }}
           />
@@ -179,21 +186,25 @@ export default function ComplexSearch(props: ComplexSearchProps) {
 
       {inputNode}
 
-      <Button
-        {...submitButtonProps}
-        variant="surface"
-        className={clsx(
-          ":uno: rounded-l-none focus-z-1",
-          submitButtonProps?.className,
-        )}
-        onClick={(evt) => {
-          onSubmit?.(value ?? {});
-          submitButtonProps?.onClick?.(evt);
-        }}
-        disabled={submitButtonProps?.disabled || disabled}
-      >
-        <IconTablerSearch />
-      </Button>
+      {onSubmit
+        ? (
+            <Button
+              {...submitButtonProps}
+              variant="surface"
+              className={clsx(
+                ":uno: rounded-l-none focus-z-1",
+                submitButtonProps?.className,
+              )}
+              onClick={(evt) => {
+                onSubmit(value ?? {});
+                submitButtonProps?.onClick?.(evt);
+              }}
+              disabled={submitButtonProps?.disabled || disabled}
+            >
+              <IconTablerSearch />
+            </Button>
+          )
+        : null}
     </Flex>
   );
 }

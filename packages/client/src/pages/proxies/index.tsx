@@ -4,23 +4,32 @@ import { Badge, Flex, IconButton, Select, Spinner, Table, Text } from "@radix-ui
 import { useAsync, useMountEffect } from "@react-hookz/web";
 import IconTablerRefresh from "~icons/tabler/refresh";
 import { snakeCase } from "change-case";
-import clsx from "clsx";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import apis from "../../apis";
 import ComplexSearch from "../../components/complex-search";
+import TableEmpty from "../../components/table-empty";
 
 export default function Proxies() {
   const { t } = useTranslation();
 
-  const [searched, setSearched] = useState<Record<string, any>>({ name: "", type: "" });
+  const [searched, setSearched] = useState<Record<string, any>>({ name: "", status: "" });
 
   const $list = useAsync(
     async () =>
       Object.values(await apis.getStatus()).flat(),
     [],
   );
+
+  const list = useMemo(() => $list[0].result.filter((item) => {
+    const hitSearch = [
+      !searched.name || item.name.toLowerCase().includes((searched.name as string).toLowerCase()),
+      !searched.status || item.status === (searched.status as string),
+    ].every(Boolean);
+
+    return hitSearch;
+  }), [$list, searched]);
 
   useMountEffect(() => {
     $list[1].execute();
@@ -32,19 +41,18 @@ export default function Proxies() {
         <ComplexSearch
           value={searched}
           onChange={setSearched}
-          onSubmit={() => {}}
           disabled={$list[0].status === "loading"}
           selectItems={[
             <Select.Item key="name" value="name">
               {t("formatting.capital_case", { value: t("name") })}
             </Select.Item>,
-            <Select.Item key="type" value="type">
-              {t("formatting.capital_case", { value: t("type") })}
+            <Select.Item key="status" value="status">
+              {t("formatting.capital_case", { value: t("status") })}
             </Select.Item>,
           ]}
           types={{
             name: { type: "text" },
-            type: {
+            status: {
               type: "select",
               inputProps: { unselectable: true },
               selectItems: ["new", "wait start", "start error", "running", "check failed", "closed"].map(item => (
@@ -69,11 +77,8 @@ export default function Proxies() {
       </Flex>
 
       <Spinner loading={$list[0].status === "loading" || $list[0].status === "not-executed"} size="3">
-        <Table.Root
-          variant="surface"
-          className={clsx(":uno: min-h-42", { ":uno: h-42": $list[0].status === "loading" })}
-        >
-          <Table.Header>
+        <Table.Root variant="surface" className=":uno: min-h-32 [&_table]:overflow-auto! overflow-hidden">
+          <Table.Header className=":uno: pos-sticky top-0 bg-[--color-background]">
             <Table.Row>
               {["name", "type", "status", "local_addr", "remote_addr", "plugin"].map(key => (
                 <Table.ColumnHeaderCell key={key}>
@@ -83,7 +88,7 @@ export default function Proxies() {
             </Table.Row>
           </Table.Header>
           <Table.Body className=":uno: [&_.rt-TableCell:empty]:after:content-[--empty-indicator]">
-            {$list[0].result.map((item, idx) => (
+            {list.map((item, idx) => (
               // eslint-disable-next-line react/no-array-index-key
               <Table.Row key={idx}>
                 {(["name", "type", "status", "local_addr", "remote_addr", "plugin"] as Array<keyof typeof item>).map((key) => {
@@ -109,10 +114,11 @@ export default function Proxies() {
                 })}
               </Table.Row>
             ))}
+            {!list.length ? <TableEmpty /> : null}
           </Table.Body>
         </Table.Root>
         <Text size="2" className="ml-a color-[--gray-indicator]">
-          {t("formatting.capital_case", { value: t("item_count", { count: $list[0].result.length }) })}
+          {t("formatting.capital_case", { value: t("item_count", { count: list.length }) })}
         </Text>
       </Spinner>
     </Flex>
