@@ -1,4 +1,5 @@
 import type { BadgeProps } from "@radix-ui/themes";
+import type { ComponentRef } from "react";
 
 import { Badge, Button, ContextMenu, Flex, IconButton, Select, Spinner, Table, Text, Tooltip } from "@radix-ui/themes";
 import { useAsync, useMountEffect } from "@react-hookz/web";
@@ -7,12 +8,13 @@ import IconTablerEdit from "~icons/tabler/edit";
 import IconTablerRefresh from "~icons/tabler/refresh";
 import IconTablerTrash from "~icons/tabler/trash";
 import { snakeCase } from "change-case";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import apis from "../../apis";
 import ComplexSearch from "../../components/complex-search";
 import TableEmpty from "../../components/table-empty";
+import DeleteDialog from "./delete-dialog";
 
 export default function Proxies() {
   const { t } = useTranslation();
@@ -37,6 +39,8 @@ export default function Proxies() {
   useMountEffect(() => {
     $list[1].execute();
   });
+
+  const deleteDialogRef = useRef<ComponentRef<typeof DeleteDialog>>(null);
 
   return (
     <Flex direction="column" gap="4" className="h-full">
@@ -147,7 +151,12 @@ export default function Proxies() {
                     <IconTablerEdit />
                     {t("formatting.sentence_case", { value: t("edit") })}
                   </ContextMenu.Item>
-                  <ContextMenu.Item color="red">
+                  <ContextMenu.Item
+                    color="red"
+                    onClick={() => {
+                      deleteDialogRef.current?.open();
+                    }}
+                  >
                     <IconTablerTrash />
                     {t("formatting.sentence_case", { value: t("delete") })}
                   </ContextMenu.Item>
@@ -161,6 +170,8 @@ export default function Proxies() {
           {t("formatting.capital_case", { value: t("item_count", { count: list.length }) })}
         </Text>
       </Spinner>
+
+      <DeleteDialog ref={deleteDialogRef} />
     </Flex>
   );
 }

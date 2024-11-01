@@ -45,8 +45,8 @@ void i18n.use(initReactI18next).use(LanguageDetector).init({
 }).then(() => {
   const { formatter } = i18n.services;
   if (formatter) {
-    formatter.add("capitalCase", (value: string) => capitalCase(value));
-    formatter.add("sentenceCase", (value: string) => sentenceCase(value));
+    formatter.add("capitalCase", (value: string) => capitalCase(value).trim());
+    formatter.add("sentenceCase", (value: string) => sentenceCase(value).trim());
     formatter.add("heading", (value: string, _, options) => {
       return !value ? "" : `${options.char || " "}${value}`;
     });

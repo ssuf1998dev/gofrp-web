@@ -24,5 +24,6 @@
   "unselect": "unselect",
   "create": "create {{what}}",
   "edit": "edit {{what}}",
-  "delete": "delete {{what}}"
+  "delete": "delete {{what}}",
+  "cancel": "cancel {{what}}"
 }
