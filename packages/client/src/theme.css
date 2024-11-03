@@ -303,8 +303,9 @@
   --color-background: #111;
 }
 
-#root {
+body {
   --empty-indicator: "--";
+  --form-required-indicator: "*";
 }
 
 html,

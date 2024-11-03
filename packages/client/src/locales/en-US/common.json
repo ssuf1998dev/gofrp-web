@@ -25,5 +25,7 @@
   "create": "create {{what}}",
   "edit": "edit {{what}}",
   "delete": "delete {{what}}",
-  "cancel": "cancel {{what}}"
+  "cancel": "cancel {{what}}",
+  "confirm": "confirm {{what}}",
+  "delete_proxy_message": "Are you sure deleting proxy \"{{what}}\", which is irreversible?"
 }

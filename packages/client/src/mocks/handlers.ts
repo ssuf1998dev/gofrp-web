@@ -6,7 +6,7 @@ const db = {
     https: faker.helpers.multiple(() => {
       const status = faker.helpers.arrayElement(["new", "wait start", "start error", "running", "check failed", "closed"]);
       return {
-        name: faker.string.alpha({ length: { min: 0, max: 10 } }),
+        name: faker.string.alpha({ length: { min: 1, max: 10 } }),
         type: faker.string.alpha(3),
         status,
         local_addr: faker.internet.url(),

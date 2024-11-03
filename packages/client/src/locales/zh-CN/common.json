@@ -25,5 +25,7 @@
   "create": "新建{{what}}",
   "edit": "编辑{{what}}",
   "delete": "删除{{what}}",
-  "cancel": "取消{{what}}"
+  "cancel": "取消{{what}}",
+  "confirm": "确定{{what}}",
+  "delete_proxy_message": "您确定要删除代理“{{what}}”吗？此操作不可逆。"
 }

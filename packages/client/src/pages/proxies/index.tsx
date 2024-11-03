@@ -14,6 +14,7 @@ import { useTranslation } from "react-i18next";
 import apis from "../../apis";
 import ComplexSearch from "../../components/complex-search";
 import TableEmpty from "../../components/table-empty";
+import CreateEditDialog from "./create-edit-dialog";
 import DeleteDialog from "./delete-dialog";
 
 export default function Proxies() {
@@ -41,6 +42,7 @@ export default function Proxies() {
   });
 
   const deleteDialogRef = useRef<ComponentRef<typeof DeleteDialog>>(null);
+  const createEditDialogRef = useRef<ComponentRef<typeof CreateEditDialog>>(null);
 
   return (
     <Flex direction="column" gap="4" className="h-full">
@@ -71,7 +73,10 @@ export default function Proxies() {
           }}
         />
         <span className=":uno: flex-grow-1" />
-        <Button>
+        <Button onClick={() => {
+          createEditDialogRef.current?.create();
+        }}
+        >
           <IconTablerCirclePlus />
           {t("formatting.sentence_case", { value: t("create", { what: t("proxy", { count: 1 }) }) })}
         </Button>
@@ -147,14 +152,17 @@ export default function Proxies() {
                         </>
                       )
                     : null}
-                  <ContextMenu.Item>
+                  <ContextMenu.Item onClick={() => {
+                    createEditDialogRef.current?.edit(item);
+                  }}
+                  >
                     <IconTablerEdit />
                     {t("formatting.sentence_case", { value: t("edit") })}
                   </ContextMenu.Item>
                   <ContextMenu.Item
                     color="red"
                     onClick={() => {
-                      deleteDialogRef.current?.open();
+                      deleteDialogRef.current?.open(item);
                     }}
                   >
                     <IconTablerTrash />
@@ -171,6 +179,7 @@ export default function Proxies() {
         </Text>
       </Spinner>
 
+      <CreateEditDialog ref={createEditDialogRef} />
       <DeleteDialog ref={deleteDialogRef} />
     </Flex>
   );

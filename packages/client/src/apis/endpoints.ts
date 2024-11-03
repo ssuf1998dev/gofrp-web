@@ -1,13 +1,13 @@
 import { makeEndpoint, parametersBuilder } from "@zodios/core";
 import { z } from "zod";
 
-const proxyStatus = z.object({
-  name: z.string(),
+export const proxyStatus = z.object({
+  name: z.string().min(1),
   type: z.string(),
   status: z.enum(["new", "wait start", "start error", "running", "check failed", "closed"]),
   err: z.string().nullish(),
-  local_addr: z.string(),
-  remote_addr: z.string(),
+  local_addr: z.string().min(1).url(),
+  remote_addr: z.string().min(1).url(),
   plugin: z.string().nullish(),
 });
 
