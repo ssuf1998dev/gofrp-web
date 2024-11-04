@@ -157,7 +157,7 @@ export default function Proxies() {
                   }}
                   >
                     <IconTablerEdit />
-                    {t("formatting.sentence_case", { value: t("edit") })}
+                    {t("formatting.upper_first", { value: t("edit") })}
                   </ContextMenu.Item>
                   <ContextMenu.Item
                     color="red"
@@ -166,7 +166,7 @@ export default function Proxies() {
                     }}
                   >
                     <IconTablerTrash />
-                    {t("formatting.sentence_case", { value: t("delete") })}
+                    {t("formatting.upper_first", { value: t("delete") })}
                   </ContextMenu.Item>
                 </ContextMenu.Content>
               </ContextMenu.Root>

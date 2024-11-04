@@ -27,5 +27,7 @@
   "delete": "delete {{what}}",
   "cancel": "cancel {{what}}",
   "confirm": "confirm {{what}}",
-  "delete_proxy_message": "Are you sure deleting proxy \"{{what}}\", which is irreversible?"
+  "delete_proxy_message": "Are you sure deleting proxy \"{{what}}\", which is irreversible?",
+  "local_ip": "local server IP",
+  "local_port": "local server port"
 }

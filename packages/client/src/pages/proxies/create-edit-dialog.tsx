@@ -1,15 +1,20 @@
 import type { Ref } from "react";
-import type { z } from "zod";
 
 import { Button, Dialog, Flex, Select } from "@radix-ui/themes";
 import { Formik } from "formik";
 import { forwardRef, useImperativeHandle, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { z } from "zod";
 
 import { proxyStatus } from "../../apis/endpoints";
 import Form from "../../components/form";
 
-type ProxyType = Pick<z.infer<typeof proxyStatus>, "name" | "type">;
+const proxySchema = proxyStatus.pick({ name: true, type: true }).merge(z.object({
+  localIP: z.string().ip({ version: "v4" }).nullish(),
+  localPort: z.number().nullish(),
+}));
+
+type ProxyType = z.infer<typeof proxySchema>;
 
 interface RefType {
   create: () => void;
@@ -38,14 +43,14 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Content maxWidth="480px">
-        <Dialog.Title>{t("formatting.sentence_case", { value: t(isEdit ? "edit" : "create") })}</Dialog.Title>
+        <Dialog.Title>{t("formatting.upper_first", { value: t(isEdit ? "edit" : "create") })}</Dialog.Title>
         <Dialog.Description />
 
         <Formik
-          initialValues={proxy ?? { name: "", type: "" }}
+          initialValues={proxy ?? { name: "", type: "", localIP: "", localPort: "" }}
           onSubmit={() => {}}
           validate={(values) => {
-            const parsed = proxyStatus.safeParse(values);
+            const parsed = proxySchema.safeParse(values);
             if (parsed.success) {
               return {};
             }
@@ -57,12 +62,12 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
               <Flex direction="column" gap="3">
                 <Form.TextField
                   name="name"
-                  label={t("formatting.sentence_case", { value: t("name") })}
+                  label={t("formatting.upper_first", { value: t("name") })}
                   required
                 />
                 <Form.Select
                   name="type"
-                  label={t("formatting.sentence_case", { value: t("type") })}
+                  label={t("formatting.upper_first", { value: t("type") })}
                   required
                 >
                   {["tcp", "udp", "http", " https", "tcpmux", " stcp", "sudp", "xtcp"].map(item => (
@@ -71,16 +76,25 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
                     </Select.Item>
                   ))}
                 </Form.Select>
+                <Form.TextField
+                  name="localIP"
+                  label={t("formatting.upper_first", { value: t("local_ip") })}
+                />
+                <Form.TextField
+                  name="localPort"
+                  label={t("formatting.upper_first", { value: t("local_port") })}
+                  type="number"
+                />
               </Flex>
 
               <Flex gap="3" mt="4" justify="end">
                 <Dialog.Close>
                   <Button variant="soft" color="gray">
-                    {t("formatting.sentence_case", { value: t("cancel") })}
+                    {t("formatting.upper_first", { value: t("cancel") })}
                   </Button>
                 </Dialog.Close>
                 <Button variant="solid" type="submit">
-                  {t("formatting.sentence_case", { value: t("confirm") })}
+                  {t("formatting.upper_first", { value: t("confirm") })}
                 </Button>
               </Flex>
             </form>

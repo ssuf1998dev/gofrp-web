@@ -1,4 +1,5 @@
 {
   "capital_case": "{{value, capitalCase}}",
-  "sentence_case": "{{value, sentenceCase}}"
+  "sentence_case": "{{value, sentenceCase}}",
+  "upper_first": "{{value, upperFirst}}"
 }
