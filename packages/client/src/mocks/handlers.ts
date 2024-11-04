@@ -5,9 +5,10 @@ const db = {
   status: {
     https: faker.helpers.multiple(() => {
       const status = faker.helpers.arrayElement(["new", "wait start", "start error", "running", "check failed", "closed"]);
+      const type = faker.helpers.arrayElement(["tcp", "udp", "http", " https", "tcpmux", " stcp", "sudp", "xtcp"]);
       return {
         name: faker.string.alpha({ length: { min: 1, max: 10 } }),
-        type: faker.string.alpha(3),
+        type,
         status,
         local_addr: faker.internet.url(),
         remote_addr: faker.internet.url(),

@@ -3,7 +3,7 @@ import { z } from "zod";
 
 export const proxyStatus = z.object({
   name: z.string().min(1),
-  type: z.string(),
+  type: z.enum(["tcp", "udp", "http", " https", "tcpmux", " stcp", "sudp", "xtcp"]),
   status: z.enum(["new", "wait start", "start error", "running", "check failed", "closed"]),
   err: z.string().nullish(),
   local_addr: z.string().min(1).url(),

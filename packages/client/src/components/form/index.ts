@@ -1,7 +1,9 @@
-import FormTextField from "./text-field";
+import Select from "./select";
+import TextField from "./text-field";
 
 const Form = {
-  TextField: FormTextField,
+  TextField,
+  Select,
 };
 
 export default Form;

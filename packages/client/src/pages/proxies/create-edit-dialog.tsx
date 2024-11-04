@@ -1,7 +1,7 @@
 import type { Ref } from "react";
 import type { z } from "zod";
 
-import { Button, Dialog, Flex } from "@radix-ui/themes";
+import { Button, Dialog, Flex, Select } from "@radix-ui/themes";
 import { Formik } from "formik";
 import { forwardRef, useImperativeHandle, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -9,15 +9,17 @@ import { useTranslation } from "react-i18next";
 import { proxyStatus } from "../../apis/endpoints";
 import Form from "../../components/form";
 
+type ProxyType = Pick<z.infer<typeof proxyStatus>, "name" | "type">;
+
 interface RefType {
   create: () => void;
-  edit: (data?: z.infer<typeof proxyStatus>) => void;
+  edit: (data?: ProxyType) => void;
 };
 
 function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
-  const [proxy, setProxy] = useState<z.infer<typeof proxyStatus>>();
+  const [proxy, setProxy] = useState<ProxyType>();
   const [isEdit, setIsEdit] = useState(false);
 
   useImperativeHandle(ref, () => ({
@@ -40,7 +42,7 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
         <Dialog.Description />
 
         <Formik
-          initialValues={proxy ?? {}}
+          initialValues={proxy ?? { name: "", type: "" }}
           onSubmit={() => {}}
           validate={(values) => {
             const parsed = proxyStatus.safeParse(values);
@@ -58,16 +60,17 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
                   label={t("formatting.sentence_case", { value: t("name") })}
                   required
                 />
-                <Form.TextField
-                  name="local_addr"
-                  label={t("formatting.sentence_case", { value: t("local_addr") })}
+                <Form.Select
+                  name="type"
+                  label={t("formatting.sentence_case", { value: t("type") })}
                   required
-                />
-                <Form.TextField
-                  name="remote_addr"
-                  label={t("formatting.sentence_case", { value: t("remote_addr") })}
-                  required
-                />
+                >
+                  {["tcp", "udp", "http", " https", "tcpmux", " stcp", "sudp", "xtcp"].map(item => (
+                    <Select.Item key={item} value={item}>
+                      {item.toUpperCase()}
+                    </Select.Item>
+                  ))}
+                </Form.Select>
               </Flex>
 
               <Flex gap="3" mt="4" justify="end">
