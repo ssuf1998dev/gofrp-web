@@ -18,7 +18,7 @@ export default function TableEmpty() {
     <tr>
       <td ref={selfRef} className=":uno: py-8 w-full color-[--gray-indicator]" colSpan={colSpan}>
         <Flex direction="column" justify="center" align="center" gap="1">
-          <IconTablerUfo className=":uno: text-3xl" />
+          <IconTablerUfo className=":uno: text-3xl animate-ufo" />
           <span>{t("formatting.capital_case", { value: t("empty") })}</span>
         </Flex>
       </td>
