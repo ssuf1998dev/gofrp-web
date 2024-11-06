@@ -119,9 +119,9 @@ export default function Proxies() {
                             "running": "green",
                             "check failed": "red",
                             "closed": "gray",
-                          } satisfies Record<typeof item["status"], BadgeProps["color"]>)[item[key]]}
+                          } satisfies Record<typeof item["status"], BadgeProps["color"]>)[item.status]}
                           >
-                            {t("formatting.sentence_case", { value: t(snakeCase(`status_${item[key]}`)) })}
+                            {t("formatting.sentence_case", { value: t(snakeCase(`status_${item.status}`)) })}
                           </Badge>
                         );
                         return (
@@ -135,6 +135,10 @@ export default function Proxies() {
                               : node}
                           </Table.Cell>
                         );
+                      }
+
+                      if (key === "type") {
+                        return <Table.Cell key={key}>{item.type.toUpperCase()}</Table.Cell>;
                       }
 
                       return <Table.Cell key={key}>{item[key]}</Table.Cell>;

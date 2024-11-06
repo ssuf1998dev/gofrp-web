@@ -29,5 +29,6 @@
   "confirm": "确定{{what}}",
   "delete_proxy_message": "您确定要删除代理“{{what}}”吗？此操作不可逆。",
   "local_ip": "本地服务IP",
-  "local_port": "本地服务端口"
+  "local_port": "本地服务端口",
+  "basic": "基础"
 }
