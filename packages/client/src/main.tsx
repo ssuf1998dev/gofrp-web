@@ -16,7 +16,7 @@ createHead();
 
 mocks().then(() => {
   createRoot(document.getElementById("root")!).render(
-    <Theme accentColor="teal" className=":uno: min-w-2xl min-h-unset h-full">
+    <Theme accentColor={"custom" as any} className=":uno: min-w-2xl min-h-unset h-full">
       <RouterProvider router={router} />
     </Theme>,
   );
