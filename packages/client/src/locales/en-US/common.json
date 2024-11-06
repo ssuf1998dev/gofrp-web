@@ -30,5 +30,8 @@
   "delete_proxy_message": "Are you sure deleting proxy \"{{what}}\", which is irreversible?",
   "local_ip": "local server IP",
   "local_port": "local server port",
-  "basic": "basic"
+  "basic": "basic",
+  "annotations": "annotations",
+  "key": "key",
+  "value": "value"
 }

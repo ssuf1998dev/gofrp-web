@@ -1,5 +1,6 @@
 import { Theme } from "@radix-ui/themes";
 import "@radix-ui/themes/styles.css";
+import consola from "consola";
 import "normalize.css";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
@@ -13,6 +14,8 @@ import "./theme.css";
 import "./styles.css";
 
 createHead();
+
+process.env.NODE_ENV === "development" && (consola.level = Infinity);
 
 mocks().then(() => {
   createRoot(document.getElementById("root")!).render(

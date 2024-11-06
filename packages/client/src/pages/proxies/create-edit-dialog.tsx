@@ -4,14 +4,19 @@ import type { Ref } from "react";
 import { proxyStatus } from "@/apis/endpoints";
 import Form from "@/components/form";
 import { Button, Dialog, Flex, Select, Tabs } from "@radix-ui/themes";
+import { consola } from "consola";
 import { Formik } from "formik";
 import { forwardRef, useImperativeHandle, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 const proxySchema = proxyStatus.pick({ name: true, type: true }).merge(z.object({
-  localIP: z.string().ip({ version: "v4" }).nullish(),
-  localPort: z.number().nullish(),
+  localIP: z.string().ip().nullish(),
+  localPort: z.number().min(0).max(65535).nullish(),
+  annotations: z
+    .array(z.array(z.string()))
+    .nullish()
+    .transform<string[][]>(value => value && Object.fromEntries(value.filter(([key]) => !!key))),
 }));
 
 type ProxyType = z.infer<typeof proxySchema>;
@@ -46,10 +51,16 @@ function BasicForm(_props: { helper: FormikProps<ProxyType> }) {
         name="localIP"
         label={t("formatting.upper_first", { value: t("local_ip") })}
       />
-      <Form.TextField
+      <Form.NumberField
         name="localPort"
         label={t("formatting.upper_first", { value: t("local_port") })}
-        type="number"
+        min={0}
+        max={65535}
+      />
+      <Form.Entries
+        name="annotations"
+        label={t("formatting.upper_first", { value: t("annotations") })}
+        tooltip={t("help.annotations")}
       />
     </Flex>
   );
@@ -89,10 +100,14 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
             initialValues={proxy ?? {
               name: "",
               type: "http",
-              localIP: "",
-              localPort: 0,
-            } satisfies ProxyType}
-            onSubmit={() => {}}
+              localIP: "127.0.0.1",
+              localPort: "",
+              annotations: [["", ""]],
+            } as unknown as ProxyType}
+            onSubmit={(values) => {
+              const parsed = proxySchema.parse(values);
+              consola.debug(parsed);
+            }}
             validate={(values) => {
               const parsed = proxySchema.safeParse(values);
               if (parsed.success) {

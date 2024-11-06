@@ -29,6 +29,9 @@ importers:
       commitizen:
         specifier: ^4.3.1
         version: 4.3.1(@types/node@22.7.5)(typescript@5.6.3)
+      consola:
+        specifier: ^3.2.3
+        version: 3.2.3
       cross-env:
         specifier: ^7.0.3
         version: 7.0.3
@@ -47,6 +50,9 @@ importers:
       lint-staged:
         specifier: ^15.2.10
         version: 15.2.10
+      nanoid:
+        specifier: ^5.0.8
+        version: 5.0.8
       typescript:
         specifier: 5.6.3
         version: 5.6.3
@@ -3507,6 +3513,7 @@ packages:
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
+    deprecated: Glob versions prior to v9 are no longer supported
 
   global-directory@4.0.1:
     resolution: {integrity: sha512-wHTUcDUoZ1H5/0iVqEudYW4/kAlN5cZ3j/bXn0Dpbizl9iaUVeWSHqiOjsgk6OW2bkLclbBjzewBz6weQ1zA2Q==}
@@ -4266,6 +4273,11 @@ packages:
   nanoid@3.3.7:
     resolution: {integrity: sha512-eSRppjcPIatRIMC1U6UngP8XFcz8MQWGQdt1MTBQ7NaAmvXDfvNxbvWV3x2y6CdEUciCSsDHDQZbhYaB8QEo2g==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
+    hasBin: true
+
+  nanoid@5.0.8:
+    resolution: {integrity: sha512-TcJPw+9RV9dibz1hHUzlLVy8N4X9TnwirAjrU08Juo6BNKggzVfP2ZJ/3ZUSq15Xl5i85i+Z89XBO90pB2PghQ==}
+    engines: {node: ^18 || >=20}
     hasBin: true
 
   natural-compare-lite@1.4.0:
@@ -10307,6 +10319,8 @@ snapshots:
   mute-stream@1.0.0: {}
 
   nanoid@3.3.7: {}
+
+  nanoid@5.0.8: {}
 
   natural-compare-lite@1.4.0: {}
 

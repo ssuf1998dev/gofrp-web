@@ -6,8 +6,8 @@ import ComplexSearch from "@/components/complex-search";
 import TableEmpty from "@/components/table-empty";
 import { Badge, Button, ContextMenu, Flex, IconButton, Select, Spinner, Table, Text, Tooltip } from "@radix-ui/themes";
 import { useAsync, useMountEffect } from "@react-hookz/web";
-import IconTablerCirclePlus from "~icons/tabler/circle-plus";
 import IconTablerEdit from "~icons/tabler/edit";
+import IconTablerPlus from "~icons/tabler/plus";
 import IconTablerRefresh from "~icons/tabler/refresh";
 import IconTablerTrash from "~icons/tabler/trash";
 import { snakeCase } from "change-case";
@@ -77,7 +77,7 @@ export default function Proxies() {
           createEditDialogRef.current?.create();
         }}
         >
-          <IconTablerCirclePlus />
+          <IconTablerPlus />
           {t("formatting.sentence_case", { value: t("create", { what: t("proxy", { count: 1 }) }) })}
         </Button>
         <IconButton
@@ -178,7 +178,7 @@ export default function Proxies() {
             {!list.length ? <TableEmpty /> : null}
           </Table.Body>
         </Table.Root>
-        <Text size="2" className="ml-a color-[--gray-indicator]">
+        <Text size="2" className=":uno: ml-a color-[--gray-indicator]">
           {t("formatting.capital_case", { value: t("item_count", { count: list.length }) })}
         </Text>
       </Spinner>
