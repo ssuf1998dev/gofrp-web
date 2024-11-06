@@ -1,13 +1,12 @@
 import type { Ref } from "react";
 
+import { proxyStatus } from "@/apis/endpoints";
+import Form from "@/components/form";
 import { Button, Dialog, Flex, Select } from "@radix-ui/themes";
 import { Formik } from "formik";
 import { forwardRef, useImperativeHandle, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
-
-import { proxyStatus } from "../../apis/endpoints";
-import Form from "../../components/form";
 
 const proxySchema = proxyStatus.pick({ name: true, type: true }).merge(z.object({
   localIP: z.string().ip({ version: "v4" }).nullish(),

@@ -1,0 +1,22 @@
+body {
+  --empty-indicator: "--";
+  --form-required-indicator: "*";
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+.rt-Link,
+.rt-Button,
+.rt-IconButton {
+  cursor: pointer;
+}
+
+.rt-Link[disabled],
+.rt-Button[disabled],
+.rt-IconButton[disabled] {
+  cursor: not-allowed;
+}

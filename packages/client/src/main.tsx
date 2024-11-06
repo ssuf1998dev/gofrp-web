@@ -10,6 +10,7 @@ import "./locales";
 import mocks from "./mocks";
 import router from "./router";
 import "./theme.css";
+import "./styles.css";
 
 createHead();
 

@@ -1,11 +1,10 @@
+import type { proxyStatus } from "@/apis/endpoints";
 import type { Ref } from "react";
 import type { z } from "zod";
 
 import { AlertDialog, Button, Flex } from "@radix-ui/themes";
 import { forwardRef, useImperativeHandle, useState } from "react";
 import { useTranslation } from "react-i18next";
-
-import type { proxyStatus } from "../../apis/endpoints";
 
 interface RefType {
   open: (data?: z.infer<typeof proxyStatus>) => void;

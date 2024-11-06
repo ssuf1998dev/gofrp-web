@@ -1,6 +1,9 @@
 import type { BadgeProps } from "@radix-ui/themes";
 import type { ComponentRef } from "react";
 
+import apis from "@/apis";
+import ComplexSearch from "@/components/complex-search";
+import TableEmpty from "@/components/table-empty";
 import { Badge, Button, ContextMenu, Flex, IconButton, Select, Spinner, Table, Text, Tooltip } from "@radix-ui/themes";
 import { useAsync, useMountEffect } from "@react-hookz/web";
 import IconTablerCirclePlus from "~icons/tabler/circle-plus";
@@ -11,9 +14,6 @@ import { snakeCase } from "change-case";
 import { useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import apis from "../../apis";
-import ComplexSearch from "../../components/complex-search";
-import TableEmpty from "../../components/table-empty";
 import CreateEditDialog from "./create-edit-dialog";
 import DeleteDialog from "./delete-dialog";
 

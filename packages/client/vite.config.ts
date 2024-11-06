@@ -4,9 +4,11 @@ import unocss from "unocss/vite";
 import icons from "unplugin-icons/vite";
 import { defineConfig } from "vite";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
+import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig(({ mode }) => ({
   plugins: [
+    tsconfigPaths(),
     unocss(),
     react({
       babel: {
