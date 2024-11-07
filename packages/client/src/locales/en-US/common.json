@@ -49,5 +49,11 @@
   "unix_path": "UNIX socket path",
   "request_headers": "request headers",
   "chinese_serial_comma": "; ",
-  "metadata": "metadata"
+  "metadata": "metadata",
+  "transport": "transport",
+  "enable_encryption": "enable encryption",
+  "enable_compression": "enable compression",
+  "bandwidth_limit": "bandwidth limit",
+  "bandwidth_limit_mode": "$t(bandwidth_limit) mode",
+  "protocol_version": "protocol version"
 }

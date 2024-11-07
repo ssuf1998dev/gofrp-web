@@ -62,6 +62,43 @@ function BasicForm() {
   );
 }
 
+function TransportForm() {
+  const { t } = useTranslation();
+
+  return (
+    <Flex direction="column" gap="3">
+      <Form.Switch
+        name="transport.useEncryption"
+        label={t("formatting.upper_first", { value: t("enable_encryption") })}
+      />
+      <Form.Switch
+        name="transport.useCompression"
+        label={t("formatting.upper_first", { value: t("enable_compression") })}
+      />
+      <Form.TextField
+        name="transport.bandwidthLimit"
+        label={t("formatting.upper_first", { value: t("bandwidth_limit") })}
+      />
+      <Form.Select
+        name="transport.bandwidthLimitMode"
+        label={t("formatting.upper_first", { value: t("bandwidth_limit_mode") })}
+      >
+        {["client", "server"].map(item => (
+          <Select.Item key={item} value={item}>{item}</Select.Item>
+        ))}
+      </Form.Select>
+      <Form.Select
+        name="transport.proxyProtocolVersion"
+        label={t("formatting.upper_first", { value: t("protocol_version") })}
+      >
+        {["v1", "v2"].map(item => (
+          <Select.Item key={item} value={item}>{item}</Select.Item>
+        ))}
+      </Form.Select>
+    </Flex>
+  );
+}
+
 function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
@@ -82,9 +119,16 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
   }));
 
   const tabsTriggers = useMemo(() => [
-    { key: "basic", label: t("formatting.upper_first", { value: t("basic") }), errorFields: ["name", "type", "localIP", "localPort", "annotations"] },
-    { key: "plugin", label: t("formatting.upper_first", { value: t("plugin") }), errorFields: ["plugin"] },
+    { key: "basic", label: t("formatting.upper_first", { value: t("basic") }) },
+    { key: "plugin", label: t("formatting.upper_first", { value: t("plugin") }) },
+    { key: "transport", label: t("formatting.upper_first", { value: t("transport") }) },
   ], [t]);
+
+  const tabsContents = useMemo(() => [
+    { key: "basic", node: <BasicForm /> },
+    { key: "plugin", node: <PluginForm /> },
+    { key: "transport", node: <TransportForm /> },
+  ], []);
 
   const formRef = useRef<FormikProps<ProxySchemaType | object>>(null);
 
@@ -136,8 +180,7 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
                   autoComplete="off"
                   className=":uno: mt-4"
                 >
-                  <Tabs.Content value="basic" className=":uno: min-h-36"><BasicForm /></Tabs.Content>
-                  <Tabs.Content value="plugin" className=":uno: min-h-36"><PluginForm /></Tabs.Content>
+                  {tabsContents.map(item => <Tabs.Content key={item.key} value={item.key} className=":uno: min-h-36">{item.node}</Tabs.Content>)}
 
                   <Flex gap="3" mt="4" justify="end">
                     <Dialog.Close>

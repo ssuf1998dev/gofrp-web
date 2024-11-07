@@ -49,5 +49,11 @@
   "unix_path": "UNIX套接字地址",
   "request_headers": "请求头",
   "chinese_serial_comma": "、",
-  "metadata": "元数据"
+  "metadata": "元数据",
+  "transport": "传输层",
+  "enable_encryption": "启用加密",
+  "enable_compression": "启用压缩",
+  "bandwidth_limit": "带宽限流",
+  "bandwidth_limit_mode": "$t(bandwidth_limit)模式",
+  "protocol_version": "协议版本"
 }
