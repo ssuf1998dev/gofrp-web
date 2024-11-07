@@ -32,7 +32,7 @@ export default function FormWrapper(props: FormWrapperProps) {
             ? (
                 <Tooltip content={tooltip}>
                   <span>
-                    <IconTablerHelp className=":uno: vertical-text-top color-[--gray-indicator] ml-1 cursor-help" />
+                    <IconTablerHelp className=":uno: vertical-middle color-[--gray-indicator] ml-1 cursor-help" />
                   </span>
                 </Tooltip>
               )

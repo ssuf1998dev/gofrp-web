@@ -81,6 +81,12 @@ export const proxySchema = proxyStatus.pick({ name: true, type: true }).merge(z.
       return value ? Object.fromEntries(value.filter(([key]) => !!key)) : [];
     })
     .nullish(),
+  metadatas: z
+    .array(z.array(z.string()))
+    .transform<string[][]>((value) => {
+      return value ? Object.fromEntries(value.filter(([key]) => !!key)) : [];
+    })
+    .nullish(),
   plugin: proxyPluginSchema.nullish(),
 }));
 

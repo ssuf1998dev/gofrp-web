@@ -1,3 +1,5 @@
 {
-  "annotations": "Annotations of a proxy, will be shown on server dashboard"
+  "annotations": "Annotations of a proxy, will be shown on server dashboard",
+  "metadata": "Extra metadata passed to server plugins for more capability"
+
 }

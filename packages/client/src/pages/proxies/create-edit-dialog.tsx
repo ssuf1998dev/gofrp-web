@@ -53,6 +53,11 @@ function BasicForm() {
         label={t("formatting.upper_first", { value: t("annotations") })}
         tooltip={t("help.annotations")}
       />
+      <Form.Entries
+        name="metadatas"
+        label={t("formatting.upper_first", { value: t("metadata") })}
+        tooltip={t("help.metadata")}
+      />
     </Flex>
   );
 }
