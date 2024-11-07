@@ -103,13 +103,13 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
                 return {};
               }
               const errors = {};
-              const touched = {};
+              // const touched = {};
               parsed.error.errors.forEach((error) => {
                 const prev = get(errors, error.path);
-                set(errors, error.path, [prev, error.message].flat().filter(Boolean));
-                set(touched, error.path, true);
+                set(errors, error.path, [prev, error].flat().filter(Boolean));
+                // set(touched, error.path, true);
               });
-              formRef.current?.setTouched(touched, false);
+              // formRef.current?.setTouched(touched, false);
               consola.debug(errors);
               return errors;
             }}

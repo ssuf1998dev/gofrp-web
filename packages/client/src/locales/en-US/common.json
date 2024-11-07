@@ -47,5 +47,6 @@
   "http_ba_user": "HTTP Basic Auth $t(username)",
   "http_ba_password": "HTTP Basic Auth $t(password)",
   "unix_path": "UNIX socket path",
-  "request_headers": "request headers"
+  "request_headers": "request headers",
+  "chinese_serial_comma": "; "
 }

@@ -47,5 +47,6 @@
   "http_ba_user": "HTTP Basic Auth$t(username)",
   "http_ba_password": "HTTP Basic Auth$t(password)",
   "unix_path": "UNIX套接字地址",
-  "request_headers": "请求头"
+  "request_headers": "请求头",
+  "chinese_serial_comma": "、"
 }

@@ -14,7 +14,7 @@ export default function FormNumberField(props: TextField.RootProps & FormWrapper
   min?: number;
   max?: number;
 }) {
-  const { name, color, className, max, min } = props;
+  const { name, label, color, className, max, min } = props;
   const [field, meta] = useField(name);
 
   const gotError = meta.error?.length && meta.touched;
@@ -27,7 +27,8 @@ export default function FormNumberField(props: TextField.RootProps & FormWrapper
           variant="surface"
           className=":uno: rounded-r-none"
           onClick={() => {
-            field.onChange({ target: { value: Number(field.value) - 1, name } });
+            const next = Number(field.value) - 1;
+            !Number.isNaN(next) && field.onChange({ target: { value: next, name } });
           }}
           disabled={field.value <= (min ?? -Infinity)}
         >
@@ -52,14 +53,15 @@ export default function FormNumberField(props: TextField.RootProps & FormWrapper
           variant="surface"
           className=":uno: rounded-l-none"
           onClick={() => {
-            field.onChange({ target: { value: Number(field.value) + 1, name } });
+            const next = Number(field.value) + 1;
+            !Number.isNaN(next) && field.onChange({ target: { value: next, name } });
           }}
           disabled={field.value >= (max ?? Infinity)}
         >
           <IconTablerPlus />
         </IconButton>
       </Flex>
-      <FormErrors {...meta} />
+      <FormErrors name={name} label={label} />
     </FormWrapper>
   );
 }

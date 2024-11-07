@@ -7,7 +7,7 @@ import FormErrors from "./errors";
 import FormWrapper, { type FormWrapperProps } from "./wrapper";
 
 export default function FormSwitch(props: SwitchProps & FormWrapperProps) {
-  const { name, color } = props;
+  const { name, label, color } = props;
   const [field, meta] = useField(name);
 
   const gotError = meta.error?.length && meta.touched;
@@ -17,7 +17,7 @@ export default function FormSwitch(props: SwitchProps & FormWrapperProps) {
       <Switch
         {...field}
         {...props}
-        checked={!!field.checked}
+        checked={!!field.value}
         color={gotError ? "red" : color}
         onBlur={(evt) => {
           evt.target.name = name;
@@ -27,7 +27,7 @@ export default function FormSwitch(props: SwitchProps & FormWrapperProps) {
           field.onChange({ target: { value, name } });
         }}
       />
-      <FormErrors {...meta} />
+      <FormErrors name={name} label={label} />
     </FormWrapper>
   );
 }

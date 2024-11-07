@@ -51,6 +51,10 @@ void i18n.use(initReactI18next).use(LanguageDetector).init({
       const [first, ...left] = value.split("");
       return [first.toUpperCase(), ...left].join("").trim();
     });
+    formatter.add("lowerFirst", (value: string) => {
+      const [first, ...left] = value.split("");
+      return [first.toLowerCase(), ...left].join("").trim();
+    });
     formatter.add("heading", (value: string, _, options) => {
       return !value ? "" : `${options.char || " "}${value}`;
     });

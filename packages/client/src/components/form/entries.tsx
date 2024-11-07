@@ -13,7 +13,7 @@ export default function FormEntries(props: {
   valueTextFieldProps?: TextField.RootProps;
 } & FormWrapperProps) {
   const { t } = useTranslation();
-  const { name, keyTextFieldProps, valueTextFieldProps } = props;
+  const { name, label, keyTextFieldProps, valueTextFieldProps } = props;
   const [field, meta] = useField<string[][]>(name);
 
   const gotError = meta.error?.length && meta.touched;
@@ -57,6 +57,7 @@ export default function FormEntries(props: {
                 type="button"
                 variant="surface"
                 onClick={() => {
+                  !field.value && field.onChange({ target: { value: [["", ""]], name } });
                   helper.insert(idx + 1, ["", ""]);
                 }}
               >
@@ -68,6 +69,7 @@ export default function FormEntries(props: {
                 variant="surface"
                 color="red"
                 onClick={() => {
+                  !field.value && field.onChange({ target: { value: [["", ""]], name } });
                   helper.remove(idx);
                 }}
                 disabled={length <= 1}
@@ -85,7 +87,7 @@ export default function FormEntries(props: {
         }}
       />
 
-      <FormErrors {...meta} />
+      <FormErrors name={name} label={label} />
     </FormWrapper>
   );
 }

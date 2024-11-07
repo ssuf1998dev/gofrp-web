@@ -1,0 +1,7 @@
+{
+  "required": "required",
+  "lte": "must less than or equal to {{max}}",
+  "gte": "must greater than or equal to {{min}}",
+  "invalid_ip": "invalid IP",
+  "invalid_url": "invalid URL"
+}

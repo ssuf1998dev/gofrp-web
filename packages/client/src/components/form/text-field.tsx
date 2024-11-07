@@ -9,7 +9,7 @@ import FormErrors from "./errors";
 import FormWrapper, { type FormWrapperProps } from "./wrapper";
 
 export default function FormTextField(props: TextField.RootProps & FormWrapperProps) {
-  const { name, color, type } = props;
+  const { name, label, color, type } = props;
   const [field, meta] = useField(name);
 
   const gotError = meta.error?.length && meta.touched;
@@ -48,7 +48,7 @@ export default function FormTextField(props: TextField.RootProps & FormWrapperPr
       >
         {passwordSuffix}
       </TextField.Root>
-      <FormErrors {...meta} />
+      <FormErrors name={name} label={label} />
     </FormWrapper>
   );
 }

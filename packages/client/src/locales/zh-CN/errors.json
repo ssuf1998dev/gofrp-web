@@ -1,0 +1,7 @@
+{
+  "required": "必填",
+  "lte": "必须小于等于{{max}}",
+  "gte": "必须大于等于{{min}}",
+  "invalid_ip": "无效IP",
+  "invalid_url": "无效URL"
+}

@@ -14,7 +14,7 @@ export default function FormSelect(props: PropsWithChildren<
   FormWrapperProps &
   { trigger?: Select.TriggerProps }
 >) {
-  const { trigger, name, children, onValueChange } = props;
+  const { trigger, label, name, children, onValueChange } = props;
   const { color } = trigger ?? {};
   const [field, meta] = useField(name);
 
@@ -51,7 +51,7 @@ export default function FormSelect(props: PropsWithChildren<
             : <SelectItemWhenEmpty />}
         </Select.Content>
       </Select.Root>
-      <FormErrors {...meta} />
+      <FormErrors name={name} label={label} />
     </FormWrapper>
   );
 }
