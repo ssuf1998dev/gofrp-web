@@ -3,10 +3,9 @@ import type { Ref } from "react";
 import { proxySchema, type ProxySchemaType } from "@/apis/schema";
 import Form from "@/components/form";
 import { Button, Dialog, Flex, Select, Tabs } from "@radix-ui/themes";
-import IconTablerExclamationCircl from "~icons/tabler/exclamation-circle";
 import { consola } from "consola";
 import { Formik } from "formik";
-import { get, intersection, set } from "lodash-es";
+import { get, set } from "lodash-es";
 import { forwardRef, useImperativeHandle, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -115,21 +114,13 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
               return errors;
             }}
           >
-            {({ handleSubmit, errors, touched }) => (
+            {({ handleSubmit }) => (
               <>
                 <Tabs.List>
                   {tabsTriggers.map((item) => {
-                    const gotError = !!intersection(Object.keys(errors), item.errorFields).length
-                      && !!intersection(Object.keys(touched), item.errorFields).length;
-
                     return (
                       <Tabs.Trigger value={item.key} key={item.key}>
-                        <Flex gap="1" align="center">
-                          {gotError
-                            ? <IconTablerExclamationCircl data-accent-color="red" className=":uno: color-[--accent-a11]" />
-                            : null}
-                          {item.label}
-                        </Flex>
+                        {item.label}
                       </Tabs.Trigger>
                     );
                   })}

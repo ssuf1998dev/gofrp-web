@@ -37,5 +37,14 @@
   "host_header_rewrite": "rewrite HOST header",
   "enable_http2": "enable HTTP2",
   "crt_path": "certificate path",
-  "key_path": "key path"
+  "key_path": "key path",
+  "username": "username",
+  "password": "password",
+  "proxy_user": "proxy $t(username)",
+  "proxy_password": "proxy $t(password)",
+  "local_path": "local path",
+  "strip_req_path_prefix": "strip request's path prefix",
+  "http_ba_user": "HTTP Basic Auth $t(username)",
+  "http_ba_password": "HTTP Basic Auth $t(password)",
+  "unix_path": "UNIX socket path"
 }

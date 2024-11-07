@@ -37,5 +37,14 @@
   "host_header_rewrite": "重写HOST请求头",
   "enable_http2": "启用HTTP2",
   "crt_path": "证书路径",
-  "key_path": "密钥路径"
+  "key_path": "密钥路径",
+  "username": "用户名",
+  "password": "密码",
+  "proxy_user": "代理$t(username)",
+  "proxy_password": "代理$t(password)",
+  "local_path": "本地路径",
+  "strip_req_path_prefix": "去除请求路径指定前缀",
+  "http_ba_user": "HTTP Basic Auth$t(username)",
+  "http_ba_password": "HTTP Basic Auth$t(password)",
+  "unix_path": "UNIX套接字地址"
 }
