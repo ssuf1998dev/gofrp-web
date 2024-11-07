@@ -1,32 +1,23 @@
-import type { FormikProps } from "formik";
 import type { Ref } from "react";
 
-import { proxyStatus } from "@/apis/endpoints";
+import { proxySchema, type ProxySchemaType } from "@/apis/schema";
 import Form from "@/components/form";
 import { Button, Dialog, Flex, Select, Tabs } from "@radix-ui/themes";
+import IconTablerExclamationCircl from "~icons/tabler/exclamation-circle";
 import { consola } from "consola";
 import { Formik } from "formik";
-import { forwardRef, useImperativeHandle, useState } from "react";
+import { get, intersection, set } from "lodash-es";
+import { forwardRef, useImperativeHandle, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { z } from "zod";
 
-const proxySchema = proxyStatus.pick({ name: true, type: true }).merge(z.object({
-  localIP: z.string().ip().nullish(),
-  localPort: z.number().min(0).max(65535).nullish(),
-  annotations: z
-    .array(z.array(z.string()))
-    .nullish()
-    .transform<string[][]>(value => value && Object.fromEntries(value.filter(([key]) => !!key))),
-}));
-
-type ProxyType = z.infer<typeof proxySchema>;
+import PluginForm from "./plugin-form";
 
 interface RefType {
   create: () => void;
-  edit: (data?: ProxyType) => void;
+  edit: (data?: any) => void;
 };
 
-function BasicForm(_props: { helper: FormikProps<ProxyType> }) {
+function BasicForm() {
   const { t } = useTranslation();
 
   return (
@@ -69,7 +60,7 @@ function BasicForm(_props: { helper: FormikProps<ProxyType> }) {
 function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
-  const [proxy, setProxy] = useState<ProxyType>();
+  const [proxy, setProxy] = useState<ProxySchemaType>();
   const [isEdit, setIsEdit] = useState(false);
 
   useImperativeHandle(ref, () => ({
@@ -85,6 +76,11 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
     },
   }));
 
+  const tabsTriggers = useMemo(() => [
+    { key: "basic", label: t("formatting.upper_first", { value: t("basic") }), errorFields: ["name", "type", "localIP", "localPort", "annotations"] },
+    { key: "plugin", label: t("formatting.upper_first", { value: t("plugin") }), errorFields: ["plugin"] },
+  ], [t]);
+
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Content maxWidth="480px">
@@ -92,18 +88,15 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
         <Dialog.Description />
 
         <Tabs.Root defaultValue="basic">
-          <Tabs.List>
-            <Tabs.Trigger value="basic">{t("formatting.upper_first", { value: t("basic") })}</Tabs.Trigger>
-          </Tabs.List>
-
           <Formik
             initialValues={proxy ?? {
               name: "",
               type: "http",
               localIP: "127.0.0.1",
-              localPort: "",
+              localPort: "" as any,
               annotations: [["", ""]],
-            } as unknown as ProxyType}
+              plugin: { type: "" },
+            } satisfies ProxySchemaType}
             onSubmit={(values) => {
               const parsed = proxySchema.parse(values);
               consola.debug(parsed);
@@ -113,26 +106,51 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
               if (parsed.success) {
                 return {};
               }
-              return parsed.error.flatten().fieldErrors;
+              const errors = {};
+              parsed.error.errors.forEach((error) => {
+                const prev = get(errors, error.path);
+                set(errors, error.path, [prev, error.message].flat().filter(Boolean));
+              });
+              consola.warn(errors);
+              return errors;
             }}
           >
-            {helper => (
-              <form onSubmit={helper.handleSubmit} autoComplete="off" className=":uno: mt-4">
-                <Tabs.Content value="basic">
-                  <BasicForm helper={helper} />
-                </Tabs.Content>
+            {({ handleSubmit, errors, touched }) => (
+              <>
+                <Tabs.List>
+                  {tabsTriggers.map((item) => {
+                    const gotError = !!intersection(Object.keys(errors), item.errorFields).length
+                      && !!intersection(Object.keys(touched), item.errorFields).length;
 
-                <Flex gap="3" mt="4" justify="end">
-                  <Dialog.Close>
-                    <Button variant="soft" color="gray">
-                      {t("formatting.upper_first", { value: t("cancel") })}
+                    return (
+                      <Tabs.Trigger value={item.key} key={item.key}>
+                        <Flex gap="1" align="center">
+                          {gotError
+                            ? <IconTablerExclamationCircl data-accent-color="red" className=":uno: color-[--accent-a11]" />
+                            : null}
+                          {item.label}
+                        </Flex>
+                      </Tabs.Trigger>
+                    );
+                  })}
+                </Tabs.List>
+
+                <form onSubmit={handleSubmit} autoComplete="off" className=":uno: mt-4">
+                  <Tabs.Content value="basic" className=":uno: min-h-36"><BasicForm /></Tabs.Content>
+                  <Tabs.Content value="plugin" className=":uno: min-h-36"><PluginForm /></Tabs.Content>
+
+                  <Flex gap="3" mt="4" justify="end">
+                    <Dialog.Close>
+                      <Button variant="soft" color="gray">
+                        {t("formatting.upper_first", { value: t("cancel") })}
+                      </Button>
+                    </Dialog.Close>
+                    <Button variant="solid" type="submit">
+                      {t("formatting.upper_first", { value: t("confirm") })}
                     </Button>
-                  </Dialog.Close>
-                  <Button variant="solid" type="submit">
-                    {t("formatting.upper_first", { value: t("confirm") })}
-                  </Button>
-                </Flex>
-              </form>
+                  </Flex>
+                </form>
+              </>
             )}
           </Formik>
         </Tabs.Root>

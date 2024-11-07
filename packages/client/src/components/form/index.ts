@@ -1,6 +1,7 @@
 import Entries from "./entries";
 import NumberField from "./number-field";
 import Select from "./select";
+import Switch from "./switch";
 import TextField from "./text-field";
 
 const Form = {
@@ -8,6 +9,7 @@ const Form = {
   Select,
   Entries,
   NumberField,
+  Switch,
 };
 
 export default Form;

@@ -20,6 +20,9 @@ importers:
       '@faker-js/faker':
         specifier: ^9.0.3
         version: 9.0.3
+      '@types/lodash-es':
+        specifier: ^4.17.12
+        version: 4.17.12
       '@types/node':
         specifier: ^22.7.5
         version: 22.7.5
@@ -50,6 +53,9 @@ importers:
       lint-staged:
         specifier: ^15.2.10
         version: 15.2.10
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
       nanoid:
         specifier: ^5.0.8
         version: 5.0.8
@@ -1997,6 +2003,9 @@ packages:
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
+
+  '@types/lodash-es@4.17.12':
+    resolution: {integrity: sha512-0NgftHUcV4v34VhXm8QBSftKVXtbkBG3ViCjs6+eJ5a6y6Mi/jiFGPc1sC7QK+9BFhWrURE3EOggmWaSxL9OzQ==}
 
   '@types/lodash@4.17.10':
     resolution: {integrity: sha512-YpS0zzoduEhuOWjAotS6A5AVCva7X4lVlYLF0FYHAY9sdraBfnatttHItlWeZdGhuEkf+OzMNg2ZYAx8t+52uQ==}
@@ -7549,6 +7558,10 @@ snapshots:
   '@types/http-errors@2.0.4': {}
 
   '@types/json-schema@7.0.15': {}
+
+  '@types/lodash-es@4.17.12':
+    dependencies:
+      '@types/lodash': 4.17.10
 
   '@types/lodash@4.17.10': {}
 

@@ -33,5 +33,9 @@
   "basic": "basic",
   "annotations": "annotations",
   "key": "key",
-  "value": "value"
+  "value": "value",
+  "host_header_rewrite": "rewrite HOST header",
+  "enable_http2": "enable HTTP2",
+  "crt_path": "certificate path",
+  "key_path": "key path"
 }

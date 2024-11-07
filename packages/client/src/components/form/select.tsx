@@ -37,7 +37,7 @@ export default function FormSelect(props: PropsWithChildren<
           }}
           {...trigger}
           color={gotError ? "red" : color}
-          className={clsx(":uno: min-w-36", trigger?.className)}
+          className={clsx(trigger?.className, ":uno: min-w-36")}
         />
         <Select.Content>
           {children

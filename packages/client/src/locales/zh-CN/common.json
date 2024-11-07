@@ -33,5 +33,9 @@
   "basic": "基础",
   "annotations": "注解",
   "key": "键",
-  "value": "值"
+  "value": "值",
+  "host_header_rewrite": "重写HOST请求头",
+  "enable_http2": "启用HTTP2",
+  "crt_path": "证书路径",
+  "key_path": "密钥路径"
 }
