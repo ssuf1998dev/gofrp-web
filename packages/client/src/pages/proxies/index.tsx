@@ -16,6 +16,7 @@ import { useTranslation } from "react-i18next";
 
 import CreateEditDialog from "./create-edit-dialog";
 import DeleteDialog from "./delete-dialog";
+import PluginForm from "./plugin-form";
 
 export default function Proxies() {
   const { t } = useTranslation();
@@ -141,6 +142,14 @@ export default function Proxies() {
                         return <Table.Cell key={key}>{item.type.toUpperCase()}</Table.Cell>;
                       }
 
+                      if (key === "plugin") {
+                        return (
+                          <Table.Cell key={key}>
+                            {PluginForm.mapping.find(plugin => plugin.key === item.plugin)?.label}
+                          </Table.Cell>
+                        );
+                      }
+
                       return <Table.Cell key={key}>{item[key]}</Table.Cell>;
                     })}
                   </Table.Row>
@@ -157,7 +166,10 @@ export default function Proxies() {
                       )
                     : null}
                   <ContextMenu.Item onClick={() => {
-                    createEditDialogRef.current?.edit(item);
+                    createEditDialogRef.current?.edit({
+                      ...item,
+                      plugin: { type: item.plugin as any },
+                    });
                   }}
                   >
                     <IconTablerEdit />

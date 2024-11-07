@@ -28,7 +28,7 @@ export default function FormNumberField(props: TextField.RootProps & FormWrapper
           className=":uno: rounded-r-none"
           onClick={() => {
             const next = Number(field.value) - 1;
-            !Number.isNaN(next) && field.onChange({ target: { value: next, name } });
+            field.onChange({ target: { value: Number.isNaN(next) ? 0 : next, name } });
           }}
           disabled={field.value <= (min ?? -Infinity)}
         >
@@ -54,7 +54,7 @@ export default function FormNumberField(props: TextField.RootProps & FormWrapper
           className=":uno: rounded-l-none"
           onClick={() => {
             const next = Number(field.value) + 1;
-            !Number.isNaN(next) && field.onChange({ target: { value: next, name } });
+            field.onChange({ target: { value: Number.isNaN(next) ? 0 : next, name } });
           }}
           disabled={field.value >= (max ?? Infinity)}
         >

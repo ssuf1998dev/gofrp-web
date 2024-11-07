@@ -18,13 +18,14 @@ export default function FormTextField(props: TextField.RootProps & FormWrapperPr
   const passwordSuffix = useMemo(() => type === "password"
     ? (
         <IconButton
+          type="button"
           variant="ghost"
           className="m-0 h-full box-border rounded-l-none"
           onClick={() => {
             togglePasswordShown();
           }}
         >
-          {passwordShown ? <IconTablerEyeClosed /> : <IconTablerEye />}
+          {passwordShown ? <IconTablerEye /> : <IconTablerEyeClosed />}
         </IconButton>
       )
     : null, [passwordShown, togglePasswordShown, type]);

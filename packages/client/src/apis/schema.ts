@@ -5,7 +5,7 @@ import { proxyStatus } from "./endpoints";
 export const proxyPluginSchema = z.discriminatedUnion("type", [
   z.object({ type: z.literal("") }),
   z.object({
-    type: z.literal("httpproxy"),
+    type: z.literal("http_proxy"),
     httpUser: z.string().nullish(),
     httpPassword: z.string().nullish(),
   }),
@@ -15,14 +15,14 @@ export const proxyPluginSchema = z.discriminatedUnion("type", [
     password: z.string().nullish(),
   }),
   z.object({
-    type: z.literal("staticfile"),
+    type: z.literal("static_file"),
     localPath: z.string().min(1),
     stripPrefix: z.string().nullish(),
     httpUser: z.string().nullish(),
     httpPassword: z.string().nullish(),
   }),
   z.object({
-    type: z.literal("unixdomainsocket"),
+    type: z.literal("unix_domain_socket"),
     unixPath: z.string().min(1),
   }),
   z.object({

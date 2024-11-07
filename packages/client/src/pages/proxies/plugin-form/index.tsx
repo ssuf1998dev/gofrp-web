@@ -15,16 +15,27 @@ import StaticFile from "./static-file";
 import TLS2Raw from "./tls-2-raw";
 import UnixDomainSocket from "./unix-domain-socket";
 
-export default function PluginForm() {
+const mapping = [
+  { key: "http_proxy", label: "HTTPProxy" },
+  { key: "socks5", label: "Socks5" },
+  { key: "static_file", label: "StaticFile" },
+  { key: "unix_domain_socket", label: "UnixDomainSocket" },
+  { key: "http2https", label: "HTTP2HTTPS" },
+  { key: "https2http", label: "HTTPS2HTTP" },
+  { key: "https2https", label: "HTTPS2HTTPS" },
+  { key: "tls2raw", label: "TLS2Raw" },
+];
+
+function PluginForm() {
   const { t } = useTranslation();
   const { values, setFieldValue } = useFormikContext<ProxySchemaType>();
 
   const plugin = useMemo(() => {
     return ({
-      httpproxy: <HTTPProxy />,
+      http_proxy: <HTTPProxy />,
       socks5: <Socks5 />,
-      staticfile: <StaticFile />,
-      unixdomainsocket: <UnixDomainSocket />,
+      static_file: <StaticFile />,
+      unix_domain_socket: <UnixDomainSocket />,
       http2https: <HTTP2HTTPS />,
       https2http: <HTTPS2HTTP />,
       https2https: <HTTPS2HTTPS />,
@@ -42,8 +53,8 @@ export default function PluginForm() {
           setFieldValue("plugin", { type: value });
         }}
       >
-        {["HTTPProxy", "Socks5", "StaticFile", "UnixDomainSocket", "HTTP2HTTPS", "HTTPS2HTTP", "HTTPS2HTTPS", "TLS2Raw"].map(label => (
-          <Select.Item key={label.toLowerCase()} value={label.toLowerCase()}>{label}</Select.Item>
+        {mapping.map(item => (
+          <Select.Item key={item.key} value={item.key}>{item.label}</Select.Item>
         ))}
       </Form.Select>
 
@@ -51,3 +62,7 @@ export default function PluginForm() {
     </Flex>
   );
 }
+
+PluginForm.mapping = mapping;
+
+export default PluginForm;

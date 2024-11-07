@@ -14,7 +14,7 @@ import PluginForm from "./plugin-form";
 
 interface RefType {
   create: () => void;
-  edit: (data?: any) => void;
+  edit: (data?: ProxySchemaType) => void;
 };
 
 function BasicForm() {
