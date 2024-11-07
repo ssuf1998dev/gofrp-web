@@ -17,7 +17,7 @@ import UnixDomainSocket from "./unix-domain-socket";
 
 export default function PluginForm() {
   const { t } = useTranslation();
-  const { values } = useFormikContext<ProxySchemaType>();
+  const { values, setFieldValue } = useFormikContext<ProxySchemaType>();
 
   const plugin = useMemo(() => {
     return ({
@@ -38,6 +38,9 @@ export default function PluginForm() {
         name="plugin.type"
         label={t("formatting.upper_first", { value: t("type") })}
         trigger={{ className: ":uno: min-w-52" }}
+        onValueChange={(value) => {
+          setFieldValue("plugin", { type: value });
+        }}
       >
         {["HTTPProxy", "Socks5", "StaticFile", "UnixDomainSocket", "HTTP2HTTPS", "HTTPS2HTTP", "HTTPS2HTTPS", "TLS2Raw"].map(label => (
           <Select.Item key={label.toLowerCase()} value={label.toLowerCase()}>{label}</Select.Item>

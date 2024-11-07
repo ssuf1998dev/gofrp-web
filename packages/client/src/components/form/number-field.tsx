@@ -36,6 +36,7 @@ export default function FormNumberField(props: TextField.RootProps & FormWrapper
         <TextField.Root
           {...field}
           {...props}
+          value={field.value ?? ""}
           color={gotError ? "red" : color}
           required={false}
           type="number"

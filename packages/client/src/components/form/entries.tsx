@@ -23,7 +23,7 @@ export default function FormEntries(props: {
       <FieldArray
         name={name}
         render={(helper) => {
-          const rows = field.value.map(([key, value], idx, { length }) => (
+          const rows = (field.value ?? [["", ""]]).map(([key, value], idx, { length }) => (
             // eslint-disable-next-line react/no-array-index-key
             <Flex key={idx} gap="2" align="center">
               <TextField.Root
@@ -31,7 +31,7 @@ export default function FormEntries(props: {
                 {...keyTextFieldProps}
                 value={key}
                 onChange={(evt) => {
-                  field.value[idx][0] = evt.target.value;
+                  (field.value ??= [["", ""]])[idx][0] = evt.target.value;
                   field.onChange({ target: { value: field.value, name } });
                   keyTextFieldProps?.onCanPlay?.(evt);
                 }}
@@ -44,7 +44,7 @@ export default function FormEntries(props: {
                 {...valueTextFieldProps}
                 value={value}
                 onChange={(evt) => {
-                  field.value[idx][1] = evt.target.value;
+                  (field.value ??= [["", ""]])[idx][1] = evt.target.value;
                   field.onChange({ target: { value: field.value, name } });
                   valueTextFieldProps?.onCanPlay?.(evt);
                 }}

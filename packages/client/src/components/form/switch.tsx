@@ -17,7 +17,15 @@ export default function FormSwitch(props: SwitchProps & FormWrapperProps) {
       <Switch
         {...field}
         {...props}
+        checked={!!field.checked}
         color={gotError ? "red" : color}
+        onBlur={(evt) => {
+          evt.target.name = name;
+          field.onBlur(evt);
+        }}
+        onCheckedChange={(value) => {
+          field.onChange({ target: { value, name } });
+        }}
       />
       <FormErrors {...meta} />
     </FormWrapper>

@@ -1,3 +1,4 @@
+import type { FormikProps } from "formik";
 import type { Ref } from "react";
 
 import { proxySchema, type ProxySchemaType } from "@/apis/schema";
@@ -6,7 +7,7 @@ import { Button, Dialog, Flex, Select, Tabs } from "@radix-ui/themes";
 import { consola } from "consola";
 import { Formik } from "formik";
 import { get, set } from "lodash-es";
-import { forwardRef, useImperativeHandle, useMemo, useState } from "react";
+import { forwardRef, useImperativeHandle, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import PluginForm from "./plugin-form";
@@ -80,6 +81,8 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
     { key: "plugin", label: t("formatting.upper_first", { value: t("plugin") }), errorFields: ["plugin"] },
   ], [t]);
 
+  const formRef = useRef<FormikProps<ProxySchemaType | object>>(null);
+
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Content maxWidth="480px">
@@ -88,14 +91,8 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
 
         <Tabs.Root defaultValue="basic">
           <Formik
-            initialValues={proxy ?? {
-              name: "",
-              type: "http",
-              localIP: "127.0.0.1",
-              localPort: "" as any,
-              annotations: [["", ""]],
-              plugin: { type: "" },
-            } satisfies ProxySchemaType}
+            innerRef={formRef}
+            initialValues={proxy ?? {}}
             onSubmit={(values) => {
               const parsed = proxySchema.parse(values);
               consola.debug(parsed);
@@ -106,11 +103,14 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
                 return {};
               }
               const errors = {};
+              const touched = {};
               parsed.error.errors.forEach((error) => {
                 const prev = get(errors, error.path);
                 set(errors, error.path, [prev, error.message].flat().filter(Boolean));
+                set(touched, error.path, true);
               });
-              consola.warn(errors);
+              formRef.current?.setTouched(touched, false);
+              consola.debug(errors);
               return errors;
             }}
           >
@@ -126,7 +126,11 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
                   })}
                 </Tabs.List>
 
-                <form onSubmit={handleSubmit} autoComplete="off" className=":uno: mt-4">
+                <form
+                  onSubmit={handleSubmit}
+                  autoComplete="off"
+                  className=":uno: mt-4"
+                >
                   <Tabs.Content value="basic" className=":uno: min-h-36"><BasicForm /></Tabs.Content>
                   <Tabs.Content value="plugin" className=":uno: min-h-36"><PluginForm /></Tabs.Content>
 

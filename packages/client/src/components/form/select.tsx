@@ -14,7 +14,7 @@ export default function FormSelect(props: PropsWithChildren<
   FormWrapperProps &
   { trigger?: Select.TriggerProps }
 >) {
-  const { trigger, name, children } = props;
+  const { trigger, name, children, onValueChange } = props;
   const { color } = trigger ?? {};
   const [field, meta] = useField(name);
 
@@ -24,10 +24,11 @@ export default function FormSelect(props: PropsWithChildren<
     <FormWrapper {...props}>
       <Select.Root
         value={field.value}
+        {...props}
         onValueChange={(value) => {
           field.onChange({ target: { value: value === "<unselect>" ? "" : value, name } });
+          onValueChange?.(value === "<unselect>" ? "" : value);
         }}
-        {...props}
         required={false}
       >
         <Select.Trigger

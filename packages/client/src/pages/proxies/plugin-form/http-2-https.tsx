@@ -15,9 +15,9 @@ export default function HTTP2HTTPS() {
         name="plugin.hostHeaderRewrite"
         label={t("formatting.upper_first", { value: t("host_header_rewrite") })}
       />
-      <Form.Switch
-        name="plugin.enableHTTP2"
-        label={t("formatting.upper_first", { value: t("enable_http2") })}
+      <Form.Entries
+        name="plugin.requestHeaders"
+        label={t("formatting.upper_first", { value: t("request_headers") })}
       />
     </>
   );

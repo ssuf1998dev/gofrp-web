@@ -41,6 +41,7 @@ export default function FormTextField(props: TextField.RootProps & FormWrapperPr
       <TextField.Root
         {...field}
         {...props}
+        value={field.value ?? ""}
         color={gotError ? "red" : color}
         required={false}
         type={finalType}
