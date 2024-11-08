@@ -87,11 +87,14 @@ export const proxySchema = proxyStatus.pick({ name: true, type: true }).merge(z.
       return value ? Object.fromEntries(value.filter(([key]) => !!key)) : [];
     })
     .nullish(),
-  plugin: proxyPluginSchema.nullish(),
+  plugin: proxyPluginSchema.transform(value => !value.type ? undefined : value).nullish(),
   transport: z.object({
     useEncryption: z.boolean(),
     useCompression: z.boolean(),
-    bandwidthLimit: z.string(),
+    bandwidthLimit: z.object({ value: z.number(), unit: z.enum(["KiB", "MiB"]) })
+      .transform<string>((value) => {
+        return value && `${value.value}${{ KiB: "KB", MiB: "MB" }[value.unit]}`;
+      }),
     bandwidthLimitMode: z.enum(["client", "server"]),
     proxyProtocolVersion: z.enum(["v1", "v2"]),
   }).partial().nullish(),

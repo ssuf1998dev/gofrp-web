@@ -1,4 +1,6 @@
 {
+  "server": "server",
+  "client": "client",
   "title": "GOFRP Client",
   "documentation_url": "https://gofrp.org",
   "documentation": "documentation",

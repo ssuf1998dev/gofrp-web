@@ -3,11 +3,11 @@ import type { Ref } from "react";
 
 import { proxySchema, type ProxySchemaType } from "@/apis/schema";
 import Form from "@/components/form";
-import { Button, Dialog, Flex, Select, Tabs } from "@radix-ui/themes";
+import { Button, Dialog, Flex, RadioGroup, Select, Tabs } from "@radix-ui/themes";
 import { consola } from "consola";
-import { Formik } from "formik";
+import { Formik, useFormikContext } from "formik";
 import { get, set } from "lodash-es";
-import { forwardRef, useImperativeHandle, useMemo, useRef, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import PluginForm from "./plugin-form";
@@ -79,25 +79,41 @@ function TransportForm() {
       <Form.TextField
         name="transport.bandwidthLimit"
         label={t("formatting.upper_first", { value: t("bandwidth_limit") })}
+        type="number"
+        units={[{ key: "KiB" }, { key: "MiB" }]}
       />
-      <Form.Select
+      <Form.RadioGroup
         name="transport.bandwidthLimitMode"
         label={t("formatting.upper_first", { value: t("bandwidth_limit_mode") })}
+        direction="row"
       >
-        {["client", "server"].map(item => (
-          <Select.Item key={item} value={item}>{item}</Select.Item>
+        {[
+          { key: "client", label: t("formatting.upper_first", { value: t("client") }) },
+          { key: "server", label: t("formatting.upper_first", { value: t("server") }) },
+        ].map(item => (
+          <RadioGroup.Item key={item.key} value={item.key}>{item.label}</RadioGroup.Item>
         ))}
-      </Form.Select>
-      <Form.Select
+      </Form.RadioGroup>
+      <Form.RadioGroup
         name="transport.proxyProtocolVersion"
         label={t("formatting.upper_first", { value: t("protocol_version") })}
+        direction="row"
       >
-        {["v1", "v2"].map(item => (
-          <Select.Item key={item} value={item}>{item}</Select.Item>
+        {[{ key: "v1" }, { key: "v2" }].map(item => (
+          <RadioGroup.Item key={item.key} value={item.key}>{item.key}</RadioGroup.Item>
         ))}
-      </Form.Select>
+      </Form.RadioGroup>
     </Flex>
   );
+}
+
+function DebugForm() {
+  const { values } = useFormikContext();
+  useEffect(() => {
+    const parsed = proxySchema.safeParse(values);
+    parsed.success && consola.debug(parsed.data);
+  }, [values]);
+  return null;
 }
 
 function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
@@ -194,6 +210,8 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
                     </Button>
                   </Flex>
                 </form>
+
+                {process.env.NODE_ENV === "development" ? <DebugForm /> : null}
               </>
             )}
           </Formik>

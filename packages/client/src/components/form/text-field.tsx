@@ -1,3 +1,5 @@
+import type { ComponentProps } from "react";
+
 import { IconButton, TextField } from "@radix-ui/themes";
 import { useToggle } from "@react-hookz/web";
 import IconTablerEye from "~icons/tabler/eye";
@@ -55,10 +57,10 @@ function FormDefaultTextField(props: TextField.RootProps & FormWrapperProps) {
   );
 }
 
-export default function FormTextField(props: TextField.RootProps & FormWrapperProps) {
+export default function FormTextField(props: (TextField.RootProps & FormWrapperProps) | ComponentProps<typeof FormNumberField>) {
   const { type, min, max } = props;
   if (type === "number") {
-    return <FormNumberField {...props} min={Number(min)} max={Number(max)} />;
+    return <FormNumberField {...props} type="number" min={Number(min)} max={Number(max)} />;
   }
 
   return <FormDefaultTextField {...props} />;
