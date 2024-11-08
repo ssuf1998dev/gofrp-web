@@ -98,6 +98,10 @@ export const proxySchema = proxyStatus.pick({ name: true, type: true }).merge(z.
     bandwidthLimitMode: z.enum(["client", "server"]),
     proxyProtocolVersion: z.enum(["v1", "v2"]),
   }).partial().nullish(),
+  loadBalancer: z.object({
+    group: z.string().min(1),
+    groupKey: z.string().nullish(),
+  }).nullish(),
 }));
 
 export type ProxySchemaType = z.infer<typeof proxySchema>;

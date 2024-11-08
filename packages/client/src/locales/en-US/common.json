@@ -57,5 +57,8 @@
   "enable_compression": "enable compression",
   "bandwidth_limit": "bandwidth limit",
   "bandwidth_limit_mode": "$t(bandwidth_limit) mode",
-  "protocol_version": "protocol version"
+  "protocol_version": "protocol version",
+  "load_balancer": "load balancer",
+  "lb_group_name": "group name",
+  "lb_group_key": "group secret key"
 }

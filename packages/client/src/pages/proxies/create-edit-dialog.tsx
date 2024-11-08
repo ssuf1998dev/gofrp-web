@@ -2,110 +2,22 @@ import type { FormikProps } from "formik";
 import type { Ref } from "react";
 
 import { proxySchema, type ProxySchemaType } from "@/apis/schema";
-import Form from "@/components/form";
-import { Button, Dialog, Flex, RadioGroup, Select, Tabs } from "@radix-ui/themes";
+import { Button, Dialog, Flex, Tabs } from "@radix-ui/themes";
 import { consola } from "consola";
 import { Formik, useFormikContext } from "formik";
 import { get, set } from "lodash-es";
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import BasicForm from "./basic-form";
+import LoadBalancerForm from "./load-balancer-form";
 import PluginForm from "./plugin-form";
+import TransportForm from "./transport-form";
 
 interface RefType {
   create: () => void;
   edit: (data?: ProxySchemaType) => void;
 };
-
-function BasicForm() {
-  const { t } = useTranslation();
-
-  return (
-    <Flex direction="column" gap="3">
-      <Form.TextField
-        name="name"
-        label={t("formatting.upper_first", { value: t("name") })}
-        required
-      />
-      <Form.Select
-        name="type"
-        label={t("formatting.upper_first", { value: t("type") })}
-        required
-      >
-        {["tcp", "udp", "http", " https", "tcpmux", " stcp", "sudp", "xtcp"].map(item => (
-          <Select.Item key={item} value={item}>
-            {item.toUpperCase()}
-          </Select.Item>
-        ))}
-      </Form.Select>
-      <Form.TextField
-        name="localIP"
-        label={t("formatting.upper_first", { value: t("local_ip") })}
-      />
-      <Form.TextField
-        name="localPort"
-        label={t("formatting.upper_first", { value: t("local_port") })}
-        type="number"
-        min={0}
-        max={65535}
-      />
-      <Form.Entries
-        name="annotations"
-        label={t("formatting.upper_first", { value: t("annotations") })}
-        tooltip={t("help.annotations")}
-      />
-      <Form.Entries
-        name="metadatas"
-        label={t("formatting.upper_first", { value: t("metadata") })}
-        tooltip={t("help.metadata")}
-      />
-    </Flex>
-  );
-}
-
-function TransportForm() {
-  const { t } = useTranslation();
-
-  return (
-    <Flex direction="column" gap="3">
-      <Form.Switch
-        name="transport.useEncryption"
-        label={t("formatting.upper_first", { value: t("enable_encryption") })}
-      />
-      <Form.Switch
-        name="transport.useCompression"
-        label={t("formatting.upper_first", { value: t("enable_compression") })}
-      />
-      <Form.TextField
-        name="transport.bandwidthLimit"
-        label={t("formatting.upper_first", { value: t("bandwidth_limit") })}
-        type="number"
-        units={[{ key: "KiB" }, { key: "MiB" }]}
-      />
-      <Form.RadioGroup
-        name="transport.bandwidthLimitMode"
-        label={t("formatting.upper_first", { value: t("bandwidth_limit_mode") })}
-        direction="row"
-      >
-        {[
-          { key: "client", label: t("formatting.upper_first", { value: t("client") }) },
-          { key: "server", label: t("formatting.upper_first", { value: t("server") }) },
-        ].map(item => (
-          <RadioGroup.Item key={item.key} value={item.key}>{item.label}</RadioGroup.Item>
-        ))}
-      </Form.RadioGroup>
-      <Form.RadioGroup
-        name="transport.proxyProtocolVersion"
-        label={t("formatting.upper_first", { value: t("protocol_version") })}
-        direction="row"
-      >
-        {[{ key: "v1" }, { key: "v2" }].map(item => (
-          <RadioGroup.Item key={item.key} value={item.key}>{item.key}</RadioGroup.Item>
-        ))}
-      </Form.RadioGroup>
-    </Flex>
-  );
-}
 
 function DebugForm() {
   const { values } = useFormikContext();
@@ -139,12 +51,14 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
     { key: "basic", label: t("formatting.upper_first", { value: t("basic") }) },
     { key: "plugin", label: t("formatting.upper_first", { value: t("plugin") }) },
     { key: "transport", label: t("formatting.upper_first", { value: t("transport") }) },
+    { key: "loadBalancer", label: t("formatting.upper_first", { value: t("load_balancer") }) },
   ], [t]);
 
   const tabsContents = useMemo(() => [
     { key: "basic", node: <BasicForm /> },
     { key: "plugin", node: <PluginForm /> },
     { key: "transport", node: <TransportForm /> },
+    { key: "loadBalancer", node: <LoadBalancerForm /> },
   ], []);
 
   const formRef = useRef<FormikProps<ProxySchemaType | object>>(null);
@@ -176,7 +90,7 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
                 // set(touched, error.path, true);
               });
               // formRef.current?.setTouched(touched, false);
-              consola.debug(errors);
+              consola.debug(errors, parsed.error.errors);
               return errors;
             }}
           >

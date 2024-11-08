@@ -60,7 +60,14 @@ function FormDefaultTextField(props: TextField.RootProps & FormWrapperProps) {
 export default function FormTextField(props: (TextField.RootProps & FormWrapperProps) | ComponentProps<typeof FormNumberField>) {
   const { type, min, max } = props;
   if (type === "number") {
-    return <FormNumberField {...props} type="number" min={Number(min)} max={Number(max)} />;
+    return (
+      <FormNumberField
+        {...props}
+        type="number"
+        min={Number.isNaN(Number(min)) ? undefined : Number(min)}
+        max={Number.isNaN(Number(max)) ? undefined : Number(max)}
+      />
+    );
   }
 
   return <FormDefaultTextField {...props} />;

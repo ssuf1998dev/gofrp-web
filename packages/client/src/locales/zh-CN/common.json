@@ -57,5 +57,8 @@
   "enable_compression": "启用压缩",
   "bandwidth_limit": "带宽限流",
   "bandwidth_limit_mode": "$t(bandwidth_limit)模式",
-  "protocol_version": "协议版本"
+  "protocol_version": "协议版本",
+  "load_balancer": "负载均衡",
+  "lb_group_name": "分组名称",
+  "lb_group_key": "分组密钥"
 }
