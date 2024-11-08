@@ -6,9 +6,10 @@ import { useField } from "formik";
 import { useMemo } from "react";
 
 import FormErrors from "./errors";
+import FormNumberField from "./number-field";
 import FormWrapper, { type FormWrapperProps } from "./wrapper";
 
-export default function FormTextField(props: TextField.RootProps & FormWrapperProps) {
+function FormDefaultTextField(props: TextField.RootProps & FormWrapperProps) {
   const { name, label, color, type } = props;
   const [field, meta] = useField(name);
 
@@ -52,4 +53,13 @@ export default function FormTextField(props: TextField.RootProps & FormWrapperPr
       <FormErrors name={name} label={label} />
     </FormWrapper>
   );
+}
+
+export default function FormTextField(props: TextField.RootProps & FormWrapperProps) {
+  const { type, min, max } = props;
+  if (type === "number") {
+    return <FormNumberField {...props} min={Number(min)} max={Number(max)} />;
+  }
+
+  return <FormDefaultTextField {...props} />;
 }

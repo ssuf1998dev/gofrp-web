@@ -42,9 +42,10 @@ function BasicForm() {
         name="localIP"
         label={t("formatting.upper_first", { value: t("local_ip") })}
       />
-      <Form.NumberField
+      <Form.TextField
         name="localPort"
         label={t("formatting.upper_first", { value: t("local_port") })}
+        type="number"
         min={0}
         max={65535}
       />
