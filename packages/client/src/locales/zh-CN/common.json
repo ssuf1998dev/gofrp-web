@@ -1,6 +1,7 @@
 {
   "server": "服务端",
   "client": "客户端",
+  "enable": "启用",
   "title": "GOFRP客户端",
   "documentation_url": "https://gofrp.org",
   "documentation": "文档",

@@ -102,6 +102,16 @@ export const proxySchema = proxyStatus.pick({ name: true, type: true }).merge(z.
     group: z.string().min(1),
     groupKey: z.string().nullish(),
   }).nullish(),
+  healthCheck: z.object({
+    type: z.enum(["tcp", "http"]),
+    timeoutSeconds: z.number().nullish(),
+    maxFailed: z.number().nullish(),
+    intervalSeconds: z.number().nullish(),
+    path: z.string(),
+    httpHeaders: z
+      .array(z.object({ name: z.string(), value: z.string() }))
+      .nullish(),
+  }).nullish(),
 }));
 
 export type ProxySchemaType = z.infer<typeof proxySchema>;

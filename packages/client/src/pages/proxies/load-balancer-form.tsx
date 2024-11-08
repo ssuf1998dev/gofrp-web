@@ -1,22 +1,41 @@
 import Form from "@/components/form";
 import { Flex } from "@radix-ui/themes";
+import { useFormikContext } from "formik";
 import { useTranslation } from "react-i18next";
 
 export default function LoadBalancerForm() {
   const { t } = useTranslation();
+  const { values, setFieldValue } = useFormikContext<{ _: { loadBalancerEnable: boolean } }>();
+  const { loadBalancerEnable } = values?._ ?? {};
 
   return (
     <Flex direction="column" gap="3">
-      <Form.TextField
-        name="loadBalancer.group"
-        label={t("formatting.upper_first", { value: t("lb_group_name") })}
-        required
+      <Form.Switch
+        name="_.loadBalancerEnable"
+        label={t("formatting.upper_first", { value: t("enable") })}
+        onCheckedChange={(value) => {
+          !value && setFieldValue("loadBalancer", undefined);
+        }}
       />
-      <Form.TextField
-        name="loadBalancer.groupKey"
-        label={t("formatting.upper_first", { value: t("lb_group_key") })}
-        type="password"
-      />
+
+      {loadBalancerEnable
+        ? (
+            <>
+              <Form.TextField
+                name="loadBalancer.group"
+                label={t("formatting.upper_first", { value: t("lb_group_name") })}
+                required
+                disabled={!loadBalancerEnable}
+              />
+              <Form.TextField
+                name="loadBalancer.groupKey"
+                label={t("formatting.upper_first", { value: t("lb_group_key") })}
+                type="password"
+                disabled={!loadBalancerEnable}
+              />
+            </>
+          )
+        : null}
     </Flex>
   );
 }

@@ -12,9 +12,9 @@ import FormWrapper, { type FormWrapperProps } from "./wrapper";
 export default function FormSelect(props: PropsWithChildren<
   Select.RootProps &
   FormWrapperProps &
-  { trigger?: Select.TriggerProps }
+  { trigger?: Select.TriggerProps; unselectable?: boolean }
 >) {
-  const { trigger, label, name, children, onValueChange } = props;
+  const { trigger, label, name, children, onValueChange, unselectable = true } = props;
   const { color } = trigger ?? {};
   const [field, meta] = useField(name);
 
@@ -44,7 +44,7 @@ export default function FormSelect(props: PropsWithChildren<
           {children
             ? (
                 <>
-                  <UnselectableSelectItem />
+                  {unselectable ? <UnselectableSelectItem /> : null}
                   {children}
                 </>
               )

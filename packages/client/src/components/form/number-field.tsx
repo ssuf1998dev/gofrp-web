@@ -17,7 +17,7 @@ export default function FormNumberField(props: TextField.RootProps & FormWrapper
   max?: number;
   units?: { key: string; label?: string }[];
 }) {
-  const { name, label, color, className, max, min, units, onChange } = props;
+  const { name, label, color, className, max, min, units, disabled, onChange } = props;
   const [field, meta] = useField(name);
   const uniting = !!units?.length;
   const fieldValue = uniting ? field.value?.value : field.value;
@@ -42,7 +42,7 @@ export default function FormNumberField(props: TextField.RootProps & FormWrapper
               name,
             } });
           }}
-          disabled={fieldValue <= (min ?? -Infinity)}
+          disabled={fieldValue <= (min ?? -Infinity) || disabled}
         >
           <IconTablerMinus />
         </IconButton>
@@ -74,6 +74,7 @@ export default function FormNumberField(props: TextField.RootProps & FormWrapper
                     field.onChange({ target: { value: { value: fieldValue, unit: value }, name } });
                     setSelectedUnit(value);
                   }}
+                  disabled={disabled}
                 >
                   <Select.Trigger variant="ghost" className="m-0 h-full box-border rounded-none" />
                   <Select.Content>
@@ -98,7 +99,7 @@ export default function FormNumberField(props: TextField.RootProps & FormWrapper
               name,
             } });
           }}
-          disabled={fieldValue >= (max ?? Infinity)}
+          disabled={fieldValue >= (max ?? Infinity) || disabled}
         >
           <IconTablerPlus />
         </IconButton>

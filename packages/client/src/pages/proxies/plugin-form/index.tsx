@@ -28,7 +28,8 @@ const mapping = [
 
 function PluginForm() {
   const { t } = useTranslation();
-  const { values, setFieldValue } = useFormikContext<ProxySchemaType>();
+  const { values, setFieldValue } = useFormikContext<ProxySchemaType & { _: { pluginEnable: boolean } }>();
+  const { pluginEnable } = values?._ ?? {};
 
   const plugin = useMemo(() => {
     return ({
@@ -45,20 +46,36 @@ function PluginForm() {
 
   return (
     <Flex direction="column" gap="3">
-      <Form.Select
-        name="plugin.type"
-        label={t("formatting.upper_first", { value: t("type") })}
-        trigger={{ className: ":uno: min-w-52" }}
-        onValueChange={(value) => {
-          setFieldValue("plugin", { type: value });
+      <Form.Switch
+        name="_.pluginEnable"
+        label={t("formatting.upper_first", { value: t("enable") })}
+        onCheckedChange={(value) => {
+          !value && setFieldValue("plugin", { type: "" });
         }}
-      >
-        {mapping.map(item => (
-          <Select.Item key={item.key} value={item.key}>{item.label}</Select.Item>
-        ))}
-      </Form.Select>
+      />
 
-      {plugin}
+      {pluginEnable
+        ? (
+            <>
+              <Form.Select
+                name="plugin.type"
+                label={t("formatting.upper_first", { value: t("type") })}
+                trigger={{ className: ":uno: min-w-52" }}
+                onValueChange={(value) => {
+                  setFieldValue("plugin", { type: value });
+                }}
+                unselectable={false}
+                disabled={!pluginEnable}
+              >
+                {mapping.map(item => (
+                  <Select.Item key={item.key} value={item.key}>{item.label}</Select.Item>
+                ))}
+              </Form.Select>
+
+              {plugin}
+            </>
+          )
+        : null}
     </Flex>
   );
 }

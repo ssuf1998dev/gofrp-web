@@ -11,10 +11,11 @@ export type FormWrapperProps = PropsWithChildren<{
   tooltip?: string;
   required?: boolean;
   htmlFor?: string;
+  disabled?: boolean;
 }>;
 
 export default function FormWrapper(props: FormWrapperProps) {
-  const { name, label, inlineLabel, tooltip, required, children, htmlFor } = props;
+  const { name, label, inlineLabel, tooltip, required, children, htmlFor, disabled } = props;
 
   return (
     <div className={clsx({ ":uno: inline-flex gap-2 items-center": inlineLabel && htmlFor })}>
@@ -24,7 +25,12 @@ export default function FormWrapper(props: FormWrapperProps) {
           className={clsx(
             ":uno: font-bold",
             inlineLabel ? "" : ":uno: mb-1.5 inline-block",
-            { ":uno: before:content-[--form-required-indicator] before:mr-0.5 before-color-[--red-11]": required },
+            {
+              ":uno: before:content-[--form-required-indicator] before:mr-0.5": required,
+              ":uno: before-color-[--red-11]": required && !disabled,
+              ":uno: before-color-[--gray-a8]": required && disabled,
+            },
+            { ":uno: color-[--gray-a8]": disabled },
           )}
         >
           {label || name}

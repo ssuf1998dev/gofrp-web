@@ -13,7 +13,7 @@ export default function FormRadioGroupField(props: (
   (RadioGroup.RootProps & { card?: false } & Pick<FlexProps, "direction">) |
   (RadioCards.RootProps & { card: true })) &
   FormWrapperProps) {
-  const { card, label, name, color, children, className, onValueChange } = props;
+  const { card, label, name, color, children, className, onValueChange, disabled } = props;
   const { direction } = props as FlexProps;
   const [field, meta] = useField(name);
 
@@ -43,6 +43,7 @@ export default function FormRadioGroupField(props: (
             "row-reverse": "flex-row-reverse gap-4",
             "column-reverse": "flex-col-reverse",
           } as any)[(direction ?? "col") as string]}`,
+          { ":uno: color-[--gray-a11]": disabled },
           className,
         )}
       >

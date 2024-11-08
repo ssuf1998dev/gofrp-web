@@ -7,7 +7,7 @@ import FormErrors from "./errors";
 import FormWrapper, { type FormWrapperProps } from "./wrapper";
 
 export default function FormSwitch(props: SwitchProps & FormWrapperProps) {
-  const { name, label, color } = props;
+  const { name, label, color, onCheckedChange } = props;
   const [field, meta] = useField(name);
 
   const gotError = meta.error?.length && meta.touched;
@@ -25,6 +25,7 @@ export default function FormSwitch(props: SwitchProps & FormWrapperProps) {
         }}
         onCheckedChange={(value) => {
           field.onChange({ target: { value, name } });
+          onCheckedChange?.(value);
         }}
       />
       <FormErrors name={name} label={label} />

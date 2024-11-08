@@ -1,6 +1,7 @@
 {
   "server": "server",
   "client": "client",
+  "enable": "enable",
   "title": "GOFRP Client",
   "documentation_url": "https://gofrp.org",
   "documentation": "documentation",

@@ -12,7 +12,7 @@ import FormNumberField from "./number-field";
 import FormWrapper, { type FormWrapperProps } from "./wrapper";
 
 function FormDefaultTextField(props: TextField.RootProps & FormWrapperProps) {
-  const { name, label, color, type } = props;
+  const { name, label, color, type, disabled } = props;
   const [field, meta] = useField(name);
 
   const gotError = meta.error?.length && meta.touched;
@@ -27,11 +27,12 @@ function FormDefaultTextField(props: TextField.RootProps & FormWrapperProps) {
           onClick={() => {
             togglePasswordShown();
           }}
+          disabled={disabled}
         >
           {passwordShown ? <IconTablerEye /> : <IconTablerEyeClosed />}
         </IconButton>
       )
-    : null, [passwordShown, togglePasswordShown, type]);
+    : null, [passwordShown, togglePasswordShown, type, disabled]);
 
   const finalType = useMemo(() => {
     if (type === "password") {
