@@ -2,6 +2,7 @@ import type { ProxySchemaType } from "@/apis/schema";
 
 import Form from "@/components/form";
 import { Flex, Select } from "@radix-ui/themes";
+import IconTablerPlug from "~icons/tabler/plug";
 import { useFormikContext } from "formik";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -73,7 +74,7 @@ function PluginForm() {
               {plugin}
             </>
           )
-        : null}
+        : <IconTablerPlug data-accent-color="gray" className=":uno: color-[--accent-3] text-16 mx-a" />}
     </Flex>
   );
 }

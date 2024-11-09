@@ -1,5 +1,6 @@
 import Form from "@/components/form";
 import { Flex, RadioGroup } from "@radix-ui/themes";
+import IconTablerTransfer from "~icons/tabler/transfer";
 import { useFormikContext } from "formik";
 import { useTranslation } from "react-i18next";
 
@@ -58,7 +59,7 @@ export default function TransportForm() {
               </Form.RadioGroup>
             </>
           )
-        : null}
+        : <IconTablerTransfer data-accent-color="gray" className=":uno: color-[--accent-3] text-16 mx-a" />}
     </Flex>
   );
 }

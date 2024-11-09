@@ -1,5 +1,6 @@
 import Form from "@/components/form";
 import { Flex, Select } from "@radix-ui/themes";
+import IconTablerHeartCheck from "~icons/tabler/heart-check";
 import { useFormikContext } from "formik";
 import { useTranslation } from "react-i18next";
 
@@ -57,7 +58,7 @@ export default function HealthCheckForm() {
               />
             </>
           )
-        : null}
+        : <IconTablerHeartCheck data-accent-color="gray" className=":uno: color-[--accent-3] text-16 mx-a" />}
     </Flex>
   );
 }

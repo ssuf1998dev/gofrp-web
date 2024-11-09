@@ -1,5 +1,6 @@
 import Form from "@/components/form";
 import { Flex } from "@radix-ui/themes";
+import IconTablerLoadBalancer from "~icons/tabler/load-balancer";
 import { useFormikContext } from "formik";
 import { useTranslation } from "react-i18next";
 
@@ -33,7 +34,7 @@ export default function LoadBalancerForm() {
               />
             </>
           )
-        : null}
+        : <IconTablerLoadBalancer data-accent-color="gray" className=":uno: color-[--accent-3] text-16 mx-a" />}
     </Flex>
   );
 }

@@ -120,7 +120,7 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
                   autoComplete="off"
                   className=":uno: mt-4"
                 >
-                  {tabsContents.map(item => <Tabs.Content key={item.key} value={item.key} className=":uno: min-h-36">{item.node}</Tabs.Content>)}
+                  {tabsContents.map(item => <Tabs.Content key={item.key} value={item.key}>{item.node}</Tabs.Content>)}
 
                   <Flex gap="3" mt="4" justify="end">
                     <Dialog.Close>
