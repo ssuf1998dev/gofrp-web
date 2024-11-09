@@ -61,5 +61,10 @@
   "protocol_version": "协议版本",
   "load_balancer": "负载均衡",
   "lb_group_name": "分组名称",
-  "lb_group_key": "分组密钥"
+  "lb_group_key": "分组密钥",
+  "timeout_seconds": "超时时间（秒）",
+  "max_failed": "最大尝试次数",
+  "check_interval_seconds": "检查周期（秒）",
+  "interface_address": "接口地址",
+  "health_check": "健康检查"
 }

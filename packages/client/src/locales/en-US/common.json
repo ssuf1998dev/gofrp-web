@@ -61,5 +61,10 @@
   "protocol_version": "protocol version",
   "load_balancer": "load balancer",
   "lb_group_name": "group name",
-  "lb_group_key": "group secret key"
+  "lb_group_key": "group secret key",
+  "timeout_seconds": "timeout (seconds)",
+  "max_failed": "maximum attempts",
+  "check_interval_seconds": "check interval (seconds)",
+  "interface_address": "interface address",
+  "health_check": "health check"
 }

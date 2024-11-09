@@ -10,6 +10,7 @@ import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState }
 import { useTranslation } from "react-i18next";
 
 import BasicForm from "./basic-form";
+import HealthCheckForm from "./health-check";
 import LoadBalancerForm from "./load-balancer-form";
 import PluginForm from "./plugin-form";
 import TransportForm from "./transport-form";
@@ -52,6 +53,7 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
     { key: "plugin", label: t("formatting.upper_first", { value: t("plugin") }) },
     { key: "transport", label: t("formatting.upper_first", { value: t("transport") }) },
     { key: "loadBalancer", label: t("formatting.upper_first", { value: t("load_balancer") }) },
+    { key: "healthCheck", label: t("formatting.upper_first", { value: t("health_check") }) },
   ], [t]);
 
   const tabsContents = useMemo(() => [
@@ -59,6 +61,7 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
     { key: "plugin", node: <PluginForm /> },
     { key: "transport", node: <TransportForm /> },
     { key: "loadBalancer", node: <LoadBalancerForm /> },
+    { key: "healthCheck", node: <HealthCheckForm /> },
   ], []);
 
   const formRef = useRef<FormikProps<ProxySchemaType | object>>(null);
@@ -99,7 +102,13 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
                 <Tabs.List>
                   {tabsTriggers.map((item) => {
                     return (
-                      <Tabs.Trigger value={item.key} key={item.key}>
+                      <Tabs.Trigger
+                        value={item.key}
+                        key={item.key}
+                        onMouseDown={(evt) => {
+                          (evt.target as HTMLElement).scrollIntoView();
+                        }}
+                      >
                         {item.label}
                       </Tabs.Trigger>
                     );
