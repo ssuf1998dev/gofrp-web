@@ -44,7 +44,7 @@ export default function FormSelect(props: PropsWithChildren<
           {children
             ? (
                 <>
-                  {unselectable ? <UnselectableSelectItem /> : null}
+                  {field.value && unselectable ? <UnselectableSelectItem /> : null}
                   {children}
                 </>
               )
