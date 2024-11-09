@@ -13,7 +13,7 @@ export default function FormErrors(props: { name: string; label?: string }) {
   const gotError = meta.error?.length && meta.touched;
 
   const formatError = useCallback((error: ZodIssue) => {
-    if ((error.code === "invalid_type" && error.message === "Required")
+    if (error.message === "Required"
       || (error.code === "too_small" && error.type === "string")
       || (error.code === "invalid_enum_value" && !error.received)) {
       return t("formatting.sentence_case", { value: t("errors.required", { label: label ?? field.name }) });

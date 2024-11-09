@@ -50,7 +50,9 @@ function PluginForm() {
         name="_.pluginEnable"
         label={t("formatting.upper_first", { value: t("enable") })}
         onCheckedChange={(value) => {
-          !value && setFieldValue("plugin", { type: "" });
+          !value && setTimeout(() => {
+            setFieldValue("plugin", { type: "" });
+          }, 0);
         }}
       />
 
@@ -61,9 +63,6 @@ function PluginForm() {
                 name="plugin.type"
                 label={t("formatting.upper_first", { value: t("type") })}
                 trigger={{ className: ":uno: min-w-52" }}
-                onValueChange={(value) => {
-                  setFieldValue("plugin", { type: value });
-                }}
                 unselectable={false}
               >
                 {mapping.map(item => (

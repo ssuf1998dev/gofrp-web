@@ -1,4 +1,5 @@
 import Entries from "./entries";
+import List from "./list";
 import RadioGroup from "./radio-group";
 import Select from "./select";
 import Switch from "./switch";
@@ -10,6 +11,7 @@ const Form = {
   Entries,
   Switch,
   RadioGroup,
+  List,
 };
 
 export default Form;

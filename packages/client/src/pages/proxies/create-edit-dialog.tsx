@@ -68,7 +68,7 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
-      <Dialog.Content maxWidth="480px">
+      <Dialog.Content maxWidth="580px">
         <Dialog.Title>{t("formatting.upper_first", { value: t(isEdit ? "edit" : "create") })}</Dialog.Title>
         <Dialog.Description />
 
@@ -93,7 +93,7 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
                 // set(touched, error.path, true);
               });
               // formRef.current?.setTouched(touched, false);
-              consola.debug(errors, parsed.error.errors);
+              consola.debug(errors, parsed.error.errors, values);
               return errors;
             }}
           >
