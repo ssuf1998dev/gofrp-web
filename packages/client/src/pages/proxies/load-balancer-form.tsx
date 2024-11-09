@@ -25,13 +25,11 @@ export default function LoadBalancerForm() {
                 name="loadBalancer.group"
                 label={t("formatting.upper_first", { value: t("lb_group_name") })}
                 required
-                disabled={!loadBalancerEnable}
               />
               <Form.TextField
                 name="loadBalancer.groupKey"
                 label={t("formatting.upper_first", { value: t("lb_group_key") })}
                 type="password"
-                disabled={!loadBalancerEnable}
               />
             </>
           )

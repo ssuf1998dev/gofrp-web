@@ -25,7 +25,6 @@ export default function HealthCheckForm() {
                 name="healthCheck.type"
                 label={t("formatting.upper_first", { value: t("type") })}
                 required
-                disabled={!healthCheckEnable}
               >
                 {["tcp", "http"].map(item => (
                   <Select.Item key={item} value={item}>
@@ -51,6 +50,10 @@ export default function HealthCheckForm() {
               <Form.TextField
                 name="healthCheck.path"
                 label={t("formatting.upper_first", { value: t("interface_address") })}
+              />
+              <Form.Entries
+                name="healthCheck.httpHeaders"
+                label={t("formatting.upper_first", { value: t("request_headers") })}
               />
             </>
           )

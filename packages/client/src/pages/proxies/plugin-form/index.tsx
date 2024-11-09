@@ -65,7 +65,6 @@ function PluginForm() {
                   setFieldValue("plugin", { type: value });
                 }}
                 unselectable={false}
-                disabled={!pluginEnable}
               >
                 {mapping.map(item => (
                   <Select.Item key={item.key} value={item.key}>{item.label}</Select.Item>

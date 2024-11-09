@@ -109,8 +109,10 @@ export const proxySchema = proxyStatus.pick({ name: true, type: true }).merge(z.
     intervalSeconds: z.number().nullish(),
     path: z.string(),
     httpHeaders: z
-      .array(z.object({ name: z.string(), value: z.string() }))
-      .nullish(),
+      .array(z.array(z.string()))
+      .transform<{ name: string; value: string }[]>((value) => {
+        return value ? value.filter(([key]) => !!key).map(([name, value]) => ({ name, value })) : [];
+      }),
   }).nullish(),
 }));
 
