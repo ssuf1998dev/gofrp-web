@@ -3,6 +3,7 @@ import IconTablerPlus from "~icons/tabler/plus";
 import IconTablerTrash from "~icons/tabler/trash";
 import clsx from "clsx";
 import { FieldArray, useField } from "formik";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 import FormErrors from "./errors";
@@ -14,9 +15,19 @@ export default function FormEntries(props: {
 } & FormWrapperProps) {
   const { t } = useTranslation();
   const { name, label, keyTextFieldProps, valueTextFieldProps } = props;
-  const [field, meta] = useField<string[][]>(name);
+  const [field, meta, helper] = useField<string[][]>(name);
 
   const gotError = meta.error?.length && meta.touched;
+
+  useEffect(() => {
+    if (typeof field.value === "object" && !Array.isArray(field.value)) {
+      helper.setValue(Object.entries(field.value));
+    }
+  }, [field.value, helper]);
+
+  if (!Array.isArray(field.value)) {
+    return null;
+  }
 
   return (
     <FormWrapper {...props}>

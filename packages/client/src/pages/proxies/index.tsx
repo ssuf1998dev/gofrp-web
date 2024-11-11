@@ -11,8 +11,10 @@ import IconTablerPlus from "~icons/tabler/plus";
 import IconTablerRefresh from "~icons/tabler/refresh";
 import IconTablerTrash from "~icons/tabler/trash";
 import { snakeCase } from "change-case";
+import { get, set } from "lodash-es";
 import { useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import * as TOML from "smol-toml";
 
 import CreateEditDialog from "./create-edit-dialog";
 import DeleteDialog from "./delete-dialog";
@@ -24,8 +26,7 @@ export default function Proxies() {
   const [searched, setSearched] = useState<Record<string, any>>({ name: "", status: "" });
 
   const $list = useAsync(
-    async () =>
-      Object.values(await apis.getStatus()).flat(),
+    async () => Object.values(await apis.getStatus()).flat(),
     [],
   );
 
@@ -40,6 +41,17 @@ export default function Proxies() {
 
   useMountEffect(() => {
     $list[1].execute();
+  });
+
+  const $proxy = useAsync(async (name: string) => {
+    const config = TOML.parse(await apis.getConfig());
+    const proxy = ((config?.proxies ?? []) as any[]).find(item => item.name === name);
+    proxy.annotations && (proxy.annotations = Object.entries(proxy.annotations));
+    proxy.metadatas && (proxy.metadatas = Object.entries(proxy.metadatas));
+    proxy.requestHeaders && (proxy.requestHeaders = Object.entries(proxy.requestHeaders.set));
+    proxy.responseHeaders && (proxy.responseHeaders = Object.entries(proxy.responseHeaders.set));
+    get(proxy, "healthCheck.httpHeaders") && set(proxy, "healthCheck.httpHeaders", Object.entries(get(proxy, "healthCheck.httpHeaders")));
+    return proxy;
   });
 
   const deleteDialogRef = useRef<ComponentRef<typeof DeleteDialog>>(null);
@@ -165,9 +177,9 @@ export default function Proxies() {
                         </>
                       )
                     : null}
-                  <ContextMenu.Item onClick={() => {
+                  <ContextMenu.Item onClick={async () => {
                     createEditDialogRef.current?.edit({
-                      ...item,
+                      ...await $proxy[1].execute(item.name),
                       plugin: { type: item.plugin as any },
                     });
                   }}

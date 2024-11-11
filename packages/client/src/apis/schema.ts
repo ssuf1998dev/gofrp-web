@@ -113,7 +113,8 @@ const baseProxySchema = proxyStatus.pick({ name: true }).and(
         .array(z.array(z.string()))
         .transform<{ name: string; value: string }[]>((value) => {
           return value ? value.filter(([key]) => !!key).map(([name, value]) => ({ name, value })) : [];
-        }),
+        })
+        .nullish(),
     }).nullish(),
   }),
 );
