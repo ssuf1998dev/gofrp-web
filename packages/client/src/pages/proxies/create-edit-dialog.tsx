@@ -2,11 +2,12 @@ import type { FormikProps } from "formik";
 import type { Ref } from "react";
 
 import { proxySchema, type ProxySchemaType } from "@/apis/schema";
-import { Button, Dialog, Flex, Tabs } from "@radix-ui/themes";
+import { Button, Dialog, Flex, IconButton, Tabs } from "@radix-ui/themes";
+import IconTablerX from "~icons/tabler/x";
 import { consola } from "consola";
-import { Formik, useFormikContext } from "formik";
+import { Formik } from "formik";
 import { get, set } from "lodash-es";
-import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
+import { forwardRef, useCallback, useImperativeHandle, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import BasicForm from "./basic-form";
@@ -19,15 +20,6 @@ interface RefType {
   create: () => void;
   edit: (data?: ProxySchemaType) => void;
 };
-
-function DebugForm() {
-  const { values } = useFormikContext();
-  useEffect(() => {
-    const parsed = proxySchema.safeParse(values);
-    parsed.success && consola.debug(parsed.data);
-  }, [values]);
-  return null;
-}
 
 function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
   const { t } = useTranslation();
@@ -66,10 +58,41 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
 
   const formRef = useRef<FormikProps<ProxySchemaType | object>>(null);
 
+  const validate = useCallback((values: ProxySchemaType | object, forceTouched?: boolean) => {
+    const parsed = proxySchema.safeParse(values);
+    if (parsed.success) {
+      return {};
+    }
+    const errors = {};
+    const touched = {};
+    parsed.error.errors.forEach((error) => {
+      const prev = get(errors, error.path);
+      set(errors, error.path, [prev, error].flat().filter(Boolean));
+      set(touched, error.path, true);
+    });
+    forceTouched && formRef.current?.setTouched(touched, false);
+    consola.debug(errors, parsed.error.errors, values);
+    return errors;
+  }, []);
+
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Content maxWidth="580px">
-        <Dialog.Title>{t("formatting.upper_first", { value: t(isEdit ? "edit" : "create") })}</Dialog.Title>
+        <Dialog.Title className=":uno: flex items-center">
+          {t("formatting.upper_first", { value: t(isEdit ? "edit" : "create") })}
+          <span className=":uno: flex-grow-1" />
+          <Dialog.Close>
+            <IconButton
+              radius="full"
+              variant="soft"
+              size="1"
+              className=":uno: justify-self-end"
+              color="gray"
+            >
+              <IconTablerX className=":uno: text-xs" />
+            </IconButton>
+          </Dialog.Close>
+        </Dialog.Title>
         <Dialog.Description />
 
         <Tabs.Root defaultValue="basic">
@@ -80,22 +103,7 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
               const parsed = proxySchema.parse(values);
               consola.debug(parsed);
             }}
-            validate={(values) => {
-              const parsed = proxySchema.safeParse(values);
-              if (parsed.success) {
-                return {};
-              }
-              const errors = {};
-              // const touched = {};
-              parsed.error.errors.forEach((error) => {
-                const prev = get(errors, error.path);
-                set(errors, error.path, [prev, error].flat().filter(Boolean));
-                // set(touched, error.path, true);
-              });
-              // formRef.current?.setTouched(touched, false);
-              consola.debug(errors, parsed.error.errors, values);
-              return errors;
-            }}
+            validate={validate}
           >
             {({ handleSubmit }) => (
               <>
@@ -116,11 +124,18 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
                 </Tabs.List>
 
                 <form
-                  onSubmit={handleSubmit}
+                  onSubmit={(evt) => {
+                    handleSubmit(evt);
+                    validate(formRef.current?.values ?? {}, true);
+                  }}
                   autoComplete="off"
                   className=":uno: mt-4"
                 >
-                  {tabsContents.map(item => <Tabs.Content key={item.key} value={item.key}>{item.node}</Tabs.Content>)}
+                  {tabsContents.map(item => (
+                    <Tabs.Content key={item.key} value={item.key} className=":uno: outline-none">
+                      {item.node}
+                    </Tabs.Content>
+                  ))}
 
                   <Flex gap="3" mt="4" justify="end">
                     <Dialog.Close>
@@ -133,8 +148,6 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
                     </Button>
                   </Flex>
                 </form>
-
-                {process.env.NODE_ENV === "development" ? <DebugForm /> : null}
               </>
             )}
           </Formik>

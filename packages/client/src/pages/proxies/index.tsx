@@ -96,7 +96,7 @@ export default function Proxies() {
       <Spinner loading={$list[0].status === "loading" || $list[0].status === "not-executed"} size="3">
         <Table.Root variant="surface" className=":uno: min-h-32 [&_table]:overflow-auto! overflow-hidden">
           <Table.Header className=":uno: pos-sticky top-0 bg-[--color-background]">
-            <Table.Row>
+            <Table.Row className=":uno: vertical-middle">
               {["name", "type", "status", "local_addr", "remote_addr", "plugin"].map(key => (
                 <Table.ColumnHeaderCell key={key}>
                   {t("formatting.capital_case", { value: t(snakeCase(key)) })}
@@ -109,7 +109,7 @@ export default function Proxies() {
               // eslint-disable-next-line react/no-array-index-key
               <ContextMenu.Root key={idx}>
                 <ContextMenu.Trigger>
-                  <Table.Row className="hover:bg-[--gray-a2]">
+                  <Table.Row className="hover:bg-[--gray-a2] vertical-middle">
                     {(["name", "type", "status", "local_addr", "remote_addr", "plugin"] as Array<keyof typeof item>).map((key) => {
                       if (key === "status") {
                         const node = (
