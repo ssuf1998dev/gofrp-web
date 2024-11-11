@@ -1,9 +1,12 @@
 import { Button, DropdownMenu, Flex, Grid, Link as RadixLink, TabNav, Text } from "@radix-ui/themes";
 import IconTablerLanguage from "~icons/tabler/language";
+import IconTablerSunMoon from "~icons/tabler/sun-moon";
 import { useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, Outlet, useMatches, useNavigate } from "react-router-dom";
 import { useHead } from "unhead";
+
+import { MainContext } from "./main";
 
 export default function App() {
   const { t, i18n } = useTranslation();
@@ -46,6 +49,27 @@ export default function App() {
               ))}
             </DropdownMenu.Content>
           </DropdownMenu.Root>
+
+          <MainContext.Consumer>
+            {({ themeAppearance, setThemeAppearance }) => (
+              <DropdownMenu.Root>
+                <DropdownMenu.Trigger>
+                  <Button size="2" variant="ghost" className="m-0"><IconTablerSunMoon /></Button>
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Content>
+                  {["light", "dark", "inherit"].map(item => (
+                    <DropdownMenu.CheckboxItem
+                      key={item}
+                      onClick={() => { setThemeAppearance?.(item as any); }}
+                      checked={item === themeAppearance}
+                    >
+                      {t("formatting.upper_first", { value: t(`theme_${item}`) })}
+                    </DropdownMenu.CheckboxItem>
+                  ))}
+                </DropdownMenu.Content>
+              </DropdownMenu.Root>
+            )}
+          </MainContext.Consumer>
         </Flex>
 
         <TabNav.Root className=":uno: shadow-none px-2">

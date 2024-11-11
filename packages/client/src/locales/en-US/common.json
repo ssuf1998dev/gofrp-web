@@ -75,5 +75,8 @@
   "custom_domain": "custom domain",
   "subdomain": "subdomain",
   "multiplexer": "multiplexer",
-  "allow_users": "allowed users"
+  "allow_users": "allowed users",
+  "theme_inherit": "inherit from system",
+  "theme_light": "light",
+  "theme_dark": "dark"
 }

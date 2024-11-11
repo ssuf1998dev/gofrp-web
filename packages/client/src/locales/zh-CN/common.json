@@ -75,5 +75,8 @@
   "custom_domain": "自定义域名",
   "subdomain": "子域名",
   "multiplexer": "复用器",
-  "allow_users": "允许访问的用户"
+  "allow_users": "允许访问的用户",
+  "theme_inherit": "跟随系统",
+  "theme_light": "浅色",
+  "theme_dark": "深色"
 }

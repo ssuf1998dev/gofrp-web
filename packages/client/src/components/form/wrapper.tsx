@@ -25,14 +25,19 @@ export default function FormWrapper(props: FormWrapperProps) {
           className={clsx(
             ":uno: font-bold",
             inlineLabel ? "" : ":uno: mb-1.5 inline-block",
-            {
-              ":uno: before:content-[--form-required-indicator] before:mr-0.5": required,
-              ":uno: before-color-[--red-11]": required && !disabled,
-              ":uno: before-color-[--gray-a8]": required && disabled,
-            },
             { ":uno: color-[--gray-a8]": disabled },
           )}
         >
+          {required
+            ? (
+                <span
+                  className={clsx(":uno: mr-0.5", disabled ? "color-[--gray-a8]" : "color-[--accent-a11]")}
+                  data-accent-color={disabled ? "gray" : "red"}
+                >
+                  *
+                </span>
+              )
+            : null}
           {label || name}
           {tooltip
             ? (

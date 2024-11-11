@@ -109,7 +109,7 @@ export default function Proxies() {
               // eslint-disable-next-line react/no-array-index-key
               <ContextMenu.Root key={idx}>
                 <ContextMenu.Trigger>
-                  <Table.Row>
+                  <Table.Row className="hover:bg-[--gray-a2]">
                     {(["name", "type", "status", "local_addr", "remote_addr", "plugin"] as Array<keyof typeof item>).map((key) => {
                       if (key === "status") {
                         const node = (
