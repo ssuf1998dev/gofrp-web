@@ -10,6 +10,7 @@ import { RouterProvider } from "react-router-dom";
 import { createHead } from "unhead";
 import "uno.css";
 
+import Toast from "./components/toast";
 import useDetectThemeAppearance from "./hooks/use-detect-theme-appearance";
 import "./locales";
 import mocks from "./mocks";
@@ -41,9 +42,9 @@ function Main() {
     <MainContext.Provider value={mainContextProviderValue}>
       <Theme accentColor={"custom" as any} appearance={themeAppearance} className=":uno: min-w-2xl min-h-unset h-full">
         <RouterProvider router={router} />
+        <Toast />
       </Theme>
     </MainContext.Provider>
-
   );
 }
 

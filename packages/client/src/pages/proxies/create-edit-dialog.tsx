@@ -94,7 +94,7 @@ function CreateEditDialog(props: { loading?: boolean }, ref: Ref<RefType>) {
       }}
     >
       <Dialog.Content maxWidth="580px">
-        <Dialog.Title className=":uno: flex items-center">
+        <Dialog.Title className=":uno: flex items-center" autoFocus>
           {t("formatting.upper_first", { value: t(isEdit ? "edit" : "create") })}
           <span className=":uno: flex-grow-1" />
           <Dialog.Close>
@@ -104,7 +104,6 @@ function CreateEditDialog(props: { loading?: boolean }, ref: Ref<RefType>) {
               size="1"
               className=":uno: justify-self-end"
               color="gray"
-              autoFocus={false}
             >
               <IconTablerX className=":uno: text-xs" />
             </IconButton>
