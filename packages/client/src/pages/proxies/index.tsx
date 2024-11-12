@@ -14,7 +14,6 @@ import { snakeCase } from "change-case";
 import { get, set } from "lodash-es";
 import { useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import * as TOML from "smol-toml";
 
 import CreateEditDialog from "./create-edit-dialog";
 import DeleteDialog from "./delete-dialog";
@@ -44,8 +43,11 @@ export default function Proxies() {
   });
 
   const $proxy = useAsync(async (name: string) => {
-    const config = TOML.parse(await apis.getConfig());
-    const proxy = ((config?.proxies ?? []) as any[]).find(item => item.name === name);
+    const config = await apis.getConfig({ headers: { Accept: "application/toml" } });
+    const proxy = (config?.proxies ?? []).find((item: any) => item.name === name);
+    if (!proxy) {
+      return null;
+    }
     proxy.annotations && (proxy.annotations = Object.entries(proxy.annotations));
     proxy.metadatas && (proxy.metadatas = Object.entries(proxy.metadatas));
     proxy.requestHeaders && (proxy.requestHeaders = Object.entries(proxy.requestHeaders.set));
@@ -177,11 +179,18 @@ export default function Proxies() {
                         </>
                       )
                     : null}
-                  <ContextMenu.Item onClick={async () => {
-                    createEditDialogRef.current?.edit({
-                      ...await $proxy[1].execute(item.name),
-                      plugin: { type: item.plugin as any },
-                    });
+                  <ContextMenu.Item onClick={() => {
+                    createEditDialogRef.current?.edit($proxy[1].execute(item.name)
+                      .then(proxy => ({
+                        ...proxy,
+                        plugin: { type: proxy.plugin },
+                        _: {
+                          pluginEnable: !!proxy.plugin,
+                          transportEnable: !!proxy.transport,
+                          loadBalancerEnable: !!proxy.loadBalancer,
+                          healthCheckEnable: !!proxy.healthCheck,
+                        },
+                      })));
                   }}
                   >
                     <IconTablerEdit />
@@ -207,7 +216,7 @@ export default function Proxies() {
         </Text>
       </Spinner>
 
-      <CreateEditDialog ref={createEditDialogRef} />
+      <CreateEditDialog ref={createEditDialogRef} loading={$proxy[0].status === "loading"} />
       <DeleteDialog ref={deleteDialogRef} />
     </Flex>
   );

@@ -6,7 +6,7 @@ import { buildeType } from "./builders";
 const db = {
   proxies: faker.helpers.multiple(() => {
     const type = faker.helpers.arrayElement(["tcp", "udp", "http", "https", "tcpmux", "stcp", "sudp", "xtcp"]);
-    const plugin = faker.helpers.arrayElement(["", "http_proxy", "socks5", "static_file", "unix_domain_socket", "http2https", " https2http", "https2https", "tls2raw"]);
+    const plugin = faker.helpers.arrayElement(["", "http_proxy", "socks5", "static_file", "unix_domain_socket", "http2https", "https2http", "https2https", "tls2raw"]);
     const transport = faker.helpers.maybe(() => ({
       useEncryption: faker.helpers.maybe(() => faker.datatype.boolean(0.5), { probability: 0.8 }),
       useCompression: faker.helpers.maybe(() => faker.datatype.boolean(0.5), { probability: 0.8 }),

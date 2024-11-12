@@ -2,7 +2,7 @@ import type { FormikProps } from "formik";
 import type { Ref } from "react";
 
 import { proxySchema, type ProxySchemaType } from "@/apis/schema";
-import { Button, Dialog, Flex, IconButton, Tabs } from "@radix-ui/themes";
+import { Button, Dialog, Flex, IconButton, Spinner, Tabs } from "@radix-ui/themes";
 import IconTablerX from "~icons/tabler/x";
 import { consola } from "consola";
 import { Formik } from "formik";
@@ -16,13 +16,23 @@ import LoadBalancerForm from "./load-balancer-form";
 import PluginForm from "./plugin-form";
 import TransportForm from "./transport-form";
 
-interface RefType {
-  create: () => void;
-  edit: (data?: ProxySchemaType) => void;
+type EditData = ProxySchemaType & {
+  _?: Partial<{
+    pluginEnable: boolean;
+    loadBalancerEnable: boolean;
+    transportEnable: boolean;
+    healthCheckEnable: boolean;
+  }>;
 };
 
-function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
+interface RefType {
+  create: () => void;
+  edit: (data?: EditData | Promise<EditData>) => void;
+};
+
+function CreateEditDialog(props: { loading?: boolean }, ref: Ref<RefType>) {
   const { t } = useTranslation();
+  const { loading } = props;
   const [open, setOpen] = useState(false);
   const [proxy, setProxy] = useState<ProxySchemaType>();
   const [isEdit, setIsEdit] = useState(false);
@@ -35,7 +45,7 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
     },
     edit: (data) => {
       setOpen(true);
-      setProxy(data);
+      data instanceof Promise ? data.then(setProxy) : setProxy(data);
       setIsEdit(true);
     },
   }));
@@ -76,7 +86,13 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
   }, []);
 
   return (
-    <Dialog.Root open={open} onOpenChange={setOpen}>
+    <Dialog.Root
+      open={open}
+      onOpenChange={(value) => {
+        setOpen(value);
+        !value && setProxy(undefined);
+      }}
+    >
       <Dialog.Content maxWidth="580px">
         <Dialog.Title className=":uno: flex items-center">
           {t("formatting.upper_first", { value: t(isEdit ? "edit" : "create") })}
@@ -88,6 +104,7 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
               size="1"
               className=":uno: justify-self-end"
               color="gray"
+              autoFocus={false}
             >
               <IconTablerX className=":uno: text-xs" />
             </IconButton>
@@ -95,63 +112,65 @@ function CreateEditDialog(_props: unknown, ref: Ref<RefType>) {
         </Dialog.Title>
         <Dialog.Description />
 
-        <Tabs.Root defaultValue="basic">
-          <Formik
-            innerRef={formRef}
-            initialValues={proxy ?? {}}
-            onSubmit={(values) => {
-              const parsed = proxySchema.parse(values);
-              consola.debug(parsed);
-            }}
-            validate={validate}
-          >
-            {({ handleSubmit }) => (
-              <>
-                <Tabs.List>
-                  {tabsTriggers.map((item) => {
-                    return (
-                      <Tabs.Trigger
-                        value={item.key}
-                        key={item.key}
-                        onMouseDown={(evt) => {
-                          (evt.target as HTMLElement).scrollIntoView();
-                        }}
-                      >
-                        {item.label}
-                      </Tabs.Trigger>
-                    );
-                  })}
-                </Tabs.List>
+        <Spinner loading={loading} size="3">
+          <Tabs.Root defaultValue="basic">
+            <Formik
+              innerRef={formRef}
+              initialValues={proxy ?? {}}
+              onSubmit={(values) => {
+                const parsed = proxySchema.parse(values);
+                consola.debug(parsed);
+              }}
+              validate={validate}
+            >
+              {({ handleSubmit }) => (
+                <>
+                  <Tabs.List>
+                    {tabsTriggers.map((item) => {
+                      return (
+                        <Tabs.Trigger
+                          value={item.key}
+                          key={item.key}
+                          onMouseDown={(evt) => {
+                            (evt.target as HTMLElement).scrollIntoView();
+                          }}
+                        >
+                          {item.label}
+                        </Tabs.Trigger>
+                      );
+                    })}
+                  </Tabs.List>
 
-                <form
-                  onSubmit={(evt) => {
-                    handleSubmit(evt);
-                    validate(formRef.current?.values ?? {}, true);
-                  }}
-                  autoComplete="off"
-                  className=":uno: mt-4"
-                >
-                  {tabsContents.map(item => (
-                    <Tabs.Content key={item.key} value={item.key} className=":uno: outline-none">
-                      {item.node}
-                    </Tabs.Content>
-                  ))}
+                  <form
+                    onSubmit={(evt) => {
+                      handleSubmit(evt);
+                      validate(formRef.current?.values ?? {}, true);
+                    }}
+                    autoComplete="off"
+                    className=":uno: mt-4"
+                  >
+                    {tabsContents.map(item => (
+                      <Tabs.Content key={item.key} value={item.key} className=":uno: outline-none">
+                        {item.node}
+                      </Tabs.Content>
+                    ))}
 
-                  <Flex gap="3" mt="4" justify="end">
-                    <Dialog.Close>
-                      <Button variant="soft" color="gray">
-                        {t("formatting.upper_first", { value: t("cancel") })}
+                    <Flex gap="3" mt="4" justify="end">
+                      <Dialog.Close>
+                        <Button variant="soft" color="gray">
+                          {t("formatting.upper_first", { value: t("cancel") })}
+                        </Button>
+                      </Dialog.Close>
+                      <Button variant="solid" type="submit">
+                        {t("formatting.upper_first", { value: t("confirm") })}
                       </Button>
-                    </Dialog.Close>
-                    <Button variant="solid" type="submit">
-                      {t("formatting.upper_first", { value: t("confirm") })}
-                    </Button>
-                  </Flex>
-                </form>
-              </>
-            )}
-          </Formik>
-        </Tabs.Root>
+                    </Flex>
+                  </form>
+                </>
+              )}
+            </Formik>
+          </Tabs.Root>
+        </Spinner>
       </Dialog.Content>
     </Dialog.Root>
   );

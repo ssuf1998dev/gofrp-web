@@ -38,6 +38,7 @@ export default function BasicForm() {
         name="name"
         label={t("formatting.upper_first", { value: t("name") })}
         required
+        autoFocus
       />
       <Form.Select
         name="type"

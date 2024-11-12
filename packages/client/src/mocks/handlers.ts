@@ -10,6 +10,7 @@ const handlers = [
     return HttpResponse.json(status);
   }),
   http.get("/api/config", async () => {
+    await delay(faker.number.int({ min: 100, max: 1000 }));
     return HttpResponse.text(TOML.stringify(db));
   }),
 ];

@@ -1,16 +1,6 @@
 import { makeEndpoint, parametersBuilder } from "@zodios/core";
 import { z } from "zod";
 
-export const proxyStatus = z.object({
-  name: z.string().min(1),
-  type: z.enum(["tcp", "udp", "http", "https", "tcpmux", "stcp", "sudp", "xtcp"]),
-  status: z.enum(["new", "wait start", "start error", "running", "check failed", "closed"]),
-  err: z.string().nullish(),
-  local_addr: z.string().min(1).url(),
-  remote_addr: z.string().min(1).url(),
-  plugin: z.string().nullish(),
-});
-
 /** @link https://github.com/fatedier/frp/blob/master/client/admin_api.go#L71 */
 export const reloadServer = makeEndpoint({
   method: "get",
@@ -27,6 +17,16 @@ export const stopServer = makeEndpoint({
   response: z.string().nullish(),
 });
 
+export const proxyStatus = z.object({
+  name: z.string().min(1),
+  type: z.enum(["tcp", "udp", "http", "https", "tcpmux", "stcp", "sudp", "xtcp"]),
+  status: z.enum(["new", "wait start", "start error", "running", "check failed", "closed"]),
+  err: z.string().nullish(),
+  local_addr: z.string().min(1).url(),
+  remote_addr: z.string().min(1).url(),
+  plugin: z.string().nullish(),
+});
+
 /** @link https://github.com/fatedier/frp/blob/master/client/admin_api.go#L162 */
 export const getStatus = makeEndpoint({
   method: "get",
@@ -40,7 +40,7 @@ export const getConfig = makeEndpoint({
   method: "get",
   path: "/config",
   alias: "getConfig",
-  response: z.string(),
+  response: z.any(),
 });
 
 /** @link https://github.com/fatedier/frp/blob/master/client/admin_api.go#L228 */
@@ -48,6 +48,6 @@ export const setConfig = makeEndpoint({
   method: "put",
   path: "/config",
   alias: "setConfig",
-  parameters: parametersBuilder().addBody(z.string().min(1)).build(),
-  response: z.string().nullish(),
+  parameters: parametersBuilder().addBody(z.any()).build(),
+  response: z.unknown().nullish(),
 });
