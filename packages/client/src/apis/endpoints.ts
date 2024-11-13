@@ -40,6 +40,7 @@ export const getConfig = makeEndpoint({
   method: "get",
   path: "/config",
   alias: "getConfig",
+  parameters: parametersBuilder().addHeader("Accept", z.literal("application/toml")).build(),
   response: z.any(),
 });
 
@@ -48,6 +49,6 @@ export const setConfig = makeEndpoint({
   method: "put",
   path: "/config",
   alias: "setConfig",
-  parameters: parametersBuilder().addBody(z.any()).build(),
+  parameters: parametersBuilder().addBody(z.any()).addHeader("Content-Type", z.literal("application/toml")).build(),
   response: z.unknown().nullish(),
 });

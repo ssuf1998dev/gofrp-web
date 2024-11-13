@@ -25,10 +25,6 @@ export default function FormEntries(props: {
     }
   }, [field.value, helper]);
 
-  if (!Array.isArray(field.value)) {
-    return null;
-  }
-
   return (
     <FormWrapper {...props}>
       <FieldArray

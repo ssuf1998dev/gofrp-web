@@ -49,7 +49,7 @@ void i18n.use(initReactI18next).use(LanguageDetector).init({
     formatter.add("sentenceCase", (value: string) => sentenceCase(value).trim());
     formatter.add("upperFirst", (value: string) => {
       const [first, ...left] = value.split("");
-      return [first.toUpperCase(), ...left].join("").trim();
+      return [(first ?? "").toUpperCase(), ...left].join("").trim();
     });
     formatter.add("lowerFirst", (value: string) => {
       const [first, ...left] = value.split("");

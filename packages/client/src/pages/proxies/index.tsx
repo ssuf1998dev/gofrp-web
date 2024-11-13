@@ -44,7 +44,7 @@ export default function Proxies() {
 
   const $proxy = useAsync(async (name: string) => {
     const config = await apis.getConfig({ headers: { Accept: "application/toml" } });
-    const proxy = (config?.proxies ?? []).find((item: any) => item.name === name);
+    const proxy = ((config?.proxies ?? []) as any[]).find(item => item.name === name);
     if (!proxy) {
       return null;
     }
@@ -52,7 +52,23 @@ export default function Proxies() {
     proxy.metadatas && (proxy.metadatas = Object.entries(proxy.metadatas));
     proxy.requestHeaders && (proxy.requestHeaders = Object.entries(proxy.requestHeaders.set));
     proxy.responseHeaders && (proxy.responseHeaders = Object.entries(proxy.responseHeaders.set));
-    get(proxy, "healthCheck.httpHeaders") && set(proxy, "healthCheck.httpHeaders", Object.entries(get(proxy, "healthCheck.httpHeaders")));
+
+    const healthCheckHttpHeaders = get(proxy, "healthCheck.httpHeaders") as { name: string; value: string }[];
+    if (healthCheckHttpHeaders) {
+      set(proxy, "healthCheck.httpHeaders", healthCheckHttpHeaders.map(({ name, value }) => [name, value]));
+    }
+
+    const transportBandwidthLimit = get(proxy, "transport.bandwidthLimit");
+    if (transportBandwidthLimit) {
+      const [,value, unit] = /(\d*)(?:KB|MB)/.exec(transportBandwidthLimit) ?? [];
+      set(proxy, "transport.bandwidthLimit", value && unit ? { value, unit } : undefined);
+    }
+
+    const pluginRequestHeaders = get(proxy, "plugin.requestHeaders.set");
+    if (pluginRequestHeaders) {
+      set(proxy, "plugin.requestHeaders", Object.entries(pluginRequestHeaders));
+    }
+
     return proxy;
   });
 
@@ -183,7 +199,7 @@ export default function Proxies() {
                     createEditDialogRef.current?.edit($proxy[1].execute(item.name)
                       .then(proxy => ({
                         ...proxy,
-                        plugin: { type: proxy.plugin },
+                        // plugin: { type: proxy.plugin },
                         _: {
                           pluginEnable: !!proxy.plugin,
                           transportEnable: !!proxy.transport,
@@ -217,7 +233,13 @@ export default function Proxies() {
       </Spinner>
 
       <CreateEditDialog ref={createEditDialogRef} loading={$proxy[0].status === "loading"} />
-      <DeleteDialog ref={deleteDialogRef} />
+      <DeleteDialog
+        ref={deleteDialogRef}
+        onConfirm={() => {
+          $list[1].reset();
+          $list[1].execute();
+        }}
+      />
     </Flex>
   );
 }
