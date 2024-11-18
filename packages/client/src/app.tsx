@@ -78,7 +78,7 @@ export default function App() {
             { to: "/configurations", label: t("formatting.capital_case", { value: t("configuration", { count: 2 }) }) },
           ].map(item => (
             <TabNav.Link key={item.to} asChild active={currentMatch?.pathname === item.to}>
-              <Link to={item.to}>{ item.label }</Link>
+              <Link to={item.to}>{item.label}</Link>
             </TabNav.Link>
           ))}
         </TabNav.Root>
