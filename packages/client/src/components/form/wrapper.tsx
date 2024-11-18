@@ -31,7 +31,7 @@ export default function FormWrapper(props: FormWrapperProps) {
           {required
             ? (
                 <span
-                  className={clsx(":uno: mr-0.5", disabled ? "color-[--gray-a8]" : "color-[--accent-a11]")}
+                  className={clsx(":uno: mr-0.5", disabled ? "color-[--accent-a8]" : "color-[--accent-a11]")}
                   data-accent-color={disabled ? "gray" : "red"}
                 >
                   *

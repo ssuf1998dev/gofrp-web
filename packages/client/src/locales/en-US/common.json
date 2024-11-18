@@ -78,5 +78,7 @@
   "allow_users": "allowed users",
   "theme_inherit": "inherit from system",
   "theme_light": "light",
-  "theme_dark": "dark"
+  "theme_dark": "dark",
+  "edit_entries_directly": "edit directly",
+  "edit_entries_interactively": "edit interactively"
 }

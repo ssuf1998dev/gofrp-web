@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { Link, Outlet, useMatches, useNavigate } from "react-router-dom";
 import { useHead } from "unhead";
 
-import { MainContext } from "./main";
+import MainContext from "./contexts/main";
 
 export default function App() {
   const { t, i18n } = useTranslation();

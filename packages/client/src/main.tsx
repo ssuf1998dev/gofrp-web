@@ -4,13 +4,14 @@ import { Theme } from "@radix-ui/themes";
 import "@radix-ui/themes/styles.css";
 import consola from "consola";
 import "normalize.css";
-import { createContext, useMemo } from "react";
+import { useMemo } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 import { createHead } from "unhead";
 import "uno.css";
 
 import Toast from "./components/toast";
+import MainContext from "./contexts/main";
 import useDetectThemeAppearance from "./hooks/use-detect-theme-appearance";
 import "./locales";
 import mocks from "./mocks";
@@ -22,14 +23,7 @@ createHead();
 
 process.env.NODE_ENV === "development" && (consola.level = Infinity);
 
-export const MainContext = createContext<Partial<{
-  themeAppearance: "inherit" | "light" | "dark";
-  setThemeAppearance: (value: "inherit" | "light" | "dark") => void;
-}>>({
-      themeAppearance: "inherit",
-    });
-
-function Main() {
+export default function Main() {
   const [themeAppearance, $themeAppearance] = useDetectThemeAppearance();
   const mainContextProviderValue = useMemo<ContextType<typeof MainContext>>(() => ({
     themeAppearance,
