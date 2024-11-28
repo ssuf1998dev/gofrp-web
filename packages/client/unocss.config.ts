@@ -15,4 +15,7 @@ export default defineConfig({
       durations: { ufo: "3s" },
     },
   },
+  rules: [
+    [/^contain-(\S+)$/, ([, value]) => ({ contain: value })],
+  ],
 });

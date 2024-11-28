@@ -129,7 +129,7 @@ function FormEntriesDirectly(props: DirectlyProps & FormWrapperProps) {
   const { name, label, onEditInteractively } = props;
   const [field, meta, helper] = useField<string[][]>(name);
 
-  const _gotError = meta.error?.length && meta.touched;
+  const gotError = meta.error?.length && meta.touched;
 
   const theme = useMemo(() => {
     if (themeAppearance === "inherit") {
@@ -139,11 +139,20 @@ function FormEntriesDirectly(props: DirectlyProps & FormWrapperProps) {
     return themeAppearance === "dark" ? githubDark : githubLight;
   }, [prefersDarkColorScheme, themeAppearance]);
 
-  const [innerValue, setInnerValue] = useState((field.value ?? []).map(entries => entries.join("=")).join("\n"));
+  const [innerValue, setInnerValue] = useState(
+    (field.value ?? []).filter(entries => entries.every(Boolean)).map(entries => entries.join("=")).join("\n"),
+  );
 
   return (
     <FormWrapper {...props}>
-      <Card className=":uno: p-0">
+      <Card
+        className={clsx(
+          ":uno: p-0",
+          ":uno: has-[.cm-focused]:after:(outline outline-[--focus-8] outline-2px) has-[.cm-focused]:(overflow-visible contain-unset)",
+          { ":uno: has-[.cm-focused]:after:outline-[--accent-8]": gotError },
+        )}
+        data-accent-color={gotError ? "red" : ""}
+      >
         <CodeMirror
           value={innerValue}
           onChange={(value) => {
@@ -154,13 +163,11 @@ function FormEntriesDirectly(props: DirectlyProps & FormWrapperProps) {
               const matched = /([\s\S]+)=([\s\S]+)/.exec(line);
               return matched && [matched[1], matched[2]];
             });
-            // entries.some(entry => isNil(entry))
-            // && helper.setError({ message: "hi", code: "custom", path: [name] } satisfies ZodCustomIssue as any);
-            field.onChange({ target: { value: entries.filter(Boolean), name } });
+            field.onChange({ target: { value: entries.filter(Boolean).length ? entries.filter(Boolean) : [["", ""]], name } });
             helper.setTouched(true, true);
           }}
-          onBlur={(evt) => {
-            field.onBlur(evt);
+          onBlur={() => {
+            field.onBlur({ target: { name } });
           }}
           className=":uno: text-sm h-32 [&_.cm-focused]:outline-unset overflow-auto [&_.cm-editor]:h-full [&_.cm-content]:cursor-text"
           theme={theme}

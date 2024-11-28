@@ -3,6 +3,8 @@ import type { Ref } from "react";
 
 import { proxySchema, type ProxySchemaType } from "@/apis/schema";
 import { Button, Dialog, Flex, IconButton, Spinner, Tabs } from "@radix-ui/themes";
+import IconTablerEdit from "~icons/tabler/edit";
+import IconTablerPlus from "~icons/tabler/plus";
 import IconTablerX from "~icons/tabler/x";
 import { consola } from "consola";
 import { Formik } from "formik";
@@ -95,6 +97,7 @@ function CreateEditDialog(props: { loading?: boolean }, ref: Ref<RefType>) {
     >
       <Dialog.Content maxWidth="580px">
         <Dialog.Title className=":uno: flex items-center" autoFocus>
+          {isEdit ? <IconTablerEdit className="mr-2" /> : <IconTablerPlus className="mr-2" />}
           {t("formatting.upper_first", { value: t(isEdit ? "edit" : "create") })}
           <span className=":uno: flex-grow-1" />
           <Dialog.Close>
