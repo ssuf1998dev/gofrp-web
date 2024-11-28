@@ -30,6 +30,7 @@
   "delete": "删除{{what}}",
   "cancel": "取消{{what}}",
   "confirm": "确定{{what}}",
+  "save": "保存{{what}}",
   "delete_proxy_message": "您确定要删除代理“{{what}}”吗？此操作不可逆。",
   "local_ip": "本地服务IP",
   "local_port": "本地服务端口",
@@ -70,6 +71,7 @@
   "interface_address": "接口地址",
   "health_check": "健康检查",
   "server_port": "服务端端口",
+  "server_addr": "服务端地址",
   "routing_conf": "路由配置",
   "route_by_http_ba_user": "根据$t(http_ba_user)路由",
   "custom_domain": "自定义域名",
@@ -80,5 +82,11 @@
   "theme_light": "浅色",
   "theme_dark": "深色",
   "edit_entries_directly": "直接编辑",
-  "edit_entries_interactively": "交互式编辑"
+  "edit_entries_interactively": "交互式编辑",
+  "hole_punching_server": "打洞服务器",
+  "dns": "DNS",
+  "login_failed_exit_immediately": "登录失败后立刻退出",
+  "starting_proxies": "启用的代理",
+  "max_udp_packet_size": "UDP最大包大小",
+  "extra_conf_dir": "附加配置文件目录"
 }

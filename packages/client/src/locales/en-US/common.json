@@ -30,6 +30,7 @@
   "delete": "delete {{what}}",
   "cancel": "cancel {{what}}",
   "confirm": "confirm {{what}}",
+  "save": "save {{what}}",
   "delete_proxy_message": "Are you sure deleting proxy \"{{what}}\", which is irreversible?",
   "local_ip": "local server IP",
   "local_port": "local server port",
@@ -70,6 +71,7 @@
   "interface_address": "interface address",
   "health_check": "health check",
   "server_port": "server port",
+  "server_addr": "server address",
   "routing_conf": "routing configuration",
   "route_by_http_ba_user": "route based on $t(http_ba_user)",
   "custom_domain": "custom domain",
@@ -80,5 +82,11 @@
   "theme_light": "light",
   "theme_dark": "dark",
   "edit_entries_directly": "edit directly",
-  "edit_entries_interactively": "edit interactively"
+  "edit_entries_interactively": "edit interactively",
+  "hole_punching_server": "hole punching server",
+  "dns": "DNS",
+  "login_failed_exit_immediately": "login failed then exit immediately",
+  "starting_proxies": "starting proxies",
+  "max_udp_packet_size": "max UDP packet size",
+  "extra_conf_dir": "directories of extra configuration files"
 }

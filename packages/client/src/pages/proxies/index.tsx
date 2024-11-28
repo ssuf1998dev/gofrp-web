@@ -76,170 +76,172 @@ export default function Proxies() {
   const createEditDialogRef = useRef<ComponentRef<typeof CreateEditDialog>>(null);
 
   return (
-    <Flex direction="column" gap="4" className="h-full">
-      <Flex gap="2">
-        <ComplexSearch
-          value={searched}
-          onChange={setSearched}
-          disabled={$list[0].status === "loading"}
-          selectItems={[
-            <Select.Item key="name" value="name">
-              {t("formatting.capital_case", { value: t("name") })}
-            </Select.Item>,
-            <Select.Item key="status" value="status">
-              {t("formatting.capital_case", { value: t("status") })}
-            </Select.Item>,
-          ]}
-          types={{
-            name: { type: "text" },
-            status: {
-              type: "select",
-              inputProps: { unselectable: true },
-              selectItems: ["new", "wait start", "start error", "running", "check failed", "closed"].map(item => (
-                <Select.Item key={item} value={item}>
-                  {t("formatting.sentence_case", { value: t(snakeCase(`status_${item}`)) })}
-                </Select.Item>
-              )),
-            },
+    <div className=":uno: px-4 pt-6 pb-8 mx-a w-full min-w-2xl max-w-5xl box-border">
+      <Flex direction="column" gap="4" className="h-full">
+        <Flex gap="2">
+          <ComplexSearch
+            value={searched}
+            onChange={setSearched}
+            disabled={$list[0].status === "loading"}
+            selectItems={[
+              <Select.Item key="name" value="name">
+                {t("formatting.capital_case", { value: t("name") })}
+              </Select.Item>,
+              <Select.Item key="status" value="status">
+                {t("formatting.capital_case", { value: t("status") })}
+              </Select.Item>,
+            ]}
+            types={{
+              name: { type: "text" },
+              status: {
+                type: "select",
+                inputProps: { unselectable: true },
+                selectItems: ["new", "wait start", "start error", "running", "check failed", "closed"].map(item => (
+                  <Select.Item key={item} value={item}>
+                    {t("formatting.sentence_case", { value: t(snakeCase(`status_${item}`)) })}
+                  </Select.Item>
+                )),
+              },
+            }}
+          />
+          <span className=":uno: flex-grow-1" />
+          <Button onClick={() => {
+            createEditDialogRef.current?.create();
           }}
-        />
-        <span className=":uno: flex-grow-1" />
-        <Button onClick={() => {
-          createEditDialogRef.current?.create();
-        }}
-        >
-          <IconTablerPlus />
-          {t("formatting.sentence_case", { value: t("create", { what: t("proxy", { count: 1 }) }) })}
-        </Button>
-        <IconButton
-          variant="surface"
-          onClick={() => {
+          >
+            <IconTablerPlus />
+            {t("formatting.sentence_case", { value: t("create", { what: t("proxy", { count: 1 }) }) })}
+          </Button>
+          <IconButton
+            variant="surface"
+            onClick={() => {
+              $list[1].reset();
+              $list[1].execute();
+            }}
+            disabled={$list[0].status === "loading"}
+          >
+            <IconTablerRefresh />
+          </IconButton>
+        </Flex>
+
+        <Spinner loading={$list[0].status === "loading" || $list[0].status === "not-executed"} size="3">
+          <Table.Root variant="surface" className=":uno: min-h-32 [&_table]:overflow-auto! overflow-hidden">
+            <Table.Header className=":uno: pos-sticky top-0 bg-[--color-background]">
+              <Table.Row className=":uno: vertical-middle">
+                {["name", "type", "status", "local_addr", "remote_addr", "plugin"].map(key => (
+                  <Table.ColumnHeaderCell key={key}>
+                    {t("formatting.capital_case", { value: t(snakeCase(key)) })}
+                  </Table.ColumnHeaderCell>
+                ))}
+              </Table.Row>
+            </Table.Header>
+            <Table.Body className=":uno: [&_.rt-TableCell:empty]:after:content-[--empty-indicator]">
+              {list.map((item, idx) => (
+              // eslint-disable-next-line react/no-array-index-key
+                <ContextMenu.Root key={idx}>
+                  <ContextMenu.Trigger>
+                    <Table.Row className="hover:bg-[--gray-a2] vertical-middle">
+                      {(["name", "type", "status", "local_addr", "remote_addr", "plugin"] as Array<keyof typeof item>).map((key) => {
+                        if (key === "status") {
+                          const node = (
+                            <Badge color={({
+                              "new": "blue",
+                              "wait start": "orange",
+                              "start error": "red",
+                              "running": "green",
+                              "check failed": "red",
+                              "closed": "gray",
+                            } satisfies Record<typeof item["status"], BadgeProps["color"]>)[item.status]}
+                            >
+                              {t("formatting.sentence_case", { value: t(snakeCase(`status_${item.status}`)) })}
+                            </Badge>
+                          );
+                          return (
+                            <Table.Cell key={key}>
+                              {item.err
+                                ? (
+                                    <Tooltip content={item.err}>
+                                      {node}
+                                    </Tooltip>
+                                  )
+                                : node}
+                            </Table.Cell>
+                          );
+                        }
+
+                        if (key === "type") {
+                          return <Table.Cell key={key}>{item.type.toUpperCase()}</Table.Cell>;
+                        }
+
+                        if (key === "plugin") {
+                          return (
+                            <Table.Cell key={key}>
+                              {PluginForm.mapping.find(plugin => plugin.key === item.plugin)?.label}
+                            </Table.Cell>
+                          );
+                        }
+
+                        return <Table.Cell key={key}>{item[key]}</Table.Cell>;
+                      })}
+                    </Table.Row>
+                  </ContextMenu.Trigger>
+                  <ContextMenu.Content>
+                    {item.name
+                      ? (
+                          <>
+                            <ContextMenu.Item className=":uno: pointer-events-none bg-[unset]! color-[--gray-a8]">
+                              {item.name}
+                            </ContextMenu.Item>
+                            <ContextMenu.Separator />
+                          </>
+                        )
+                      : null}
+                    <ContextMenu.Item onClick={() => {
+                      createEditDialogRef.current?.edit($proxy[1].execute(item.name)
+                        .then(proxy => ({
+                          ...proxy,
+                          // plugin: { type: proxy.plugin },
+                          _: {
+                            pluginEnable: !!proxy.plugin,
+                            transportEnable: !!proxy.transport,
+                            loadBalancerEnable: !!proxy.loadBalancer,
+                            healthCheckEnable: !!proxy.healthCheck,
+                          },
+                        })));
+                    }}
+                    >
+                      <IconTablerEdit />
+                      {t("formatting.upper_first", { value: t("edit") })}
+                    </ContextMenu.Item>
+                    <ContextMenu.Item
+                      color="red"
+                      onClick={() => {
+                        deleteDialogRef.current?.open(item);
+                      }}
+                    >
+                      <IconTablerTrash />
+                      {t("formatting.upper_first", { value: t("delete") })}
+                    </ContextMenu.Item>
+                  </ContextMenu.Content>
+                </ContextMenu.Root>
+              ))}
+              {!list.length ? <TableEmpty /> : null}
+            </Table.Body>
+          </Table.Root>
+          <Text size="2" className=":uno: ml-a color-[--gray-indicator]">
+            {t("formatting.capital_case", { value: t("item_count", { count: list.length }) })}
+          </Text>
+        </Spinner>
+
+        <CreateEditDialog ref={createEditDialogRef} loading={$proxy[0].status === "loading"} />
+        <DeleteDialog
+          ref={deleteDialogRef}
+          onConfirm={() => {
             $list[1].reset();
             $list[1].execute();
           }}
-          disabled={$list[0].status === "loading"}
-        >
-          <IconTablerRefresh />
-        </IconButton>
+        />
       </Flex>
-
-      <Spinner loading={$list[0].status === "loading" || $list[0].status === "not-executed"} size="3">
-        <Table.Root variant="surface" className=":uno: min-h-32 [&_table]:overflow-auto! overflow-hidden">
-          <Table.Header className=":uno: pos-sticky top-0 bg-[--color-background]">
-            <Table.Row className=":uno: vertical-middle">
-              {["name", "type", "status", "local_addr", "remote_addr", "plugin"].map(key => (
-                <Table.ColumnHeaderCell key={key}>
-                  {t("formatting.capital_case", { value: t(snakeCase(key)) })}
-                </Table.ColumnHeaderCell>
-              ))}
-            </Table.Row>
-          </Table.Header>
-          <Table.Body className=":uno: [&_.rt-TableCell:empty]:after:content-[--empty-indicator]">
-            {list.map((item, idx) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <ContextMenu.Root key={idx}>
-                <ContextMenu.Trigger>
-                  <Table.Row className="hover:bg-[--gray-a2] vertical-middle">
-                    {(["name", "type", "status", "local_addr", "remote_addr", "plugin"] as Array<keyof typeof item>).map((key) => {
-                      if (key === "status") {
-                        const node = (
-                          <Badge color={({
-                            "new": "blue",
-                            "wait start": "orange",
-                            "start error": "red",
-                            "running": "green",
-                            "check failed": "red",
-                            "closed": "gray",
-                          } satisfies Record<typeof item["status"], BadgeProps["color"]>)[item.status]}
-                          >
-                            {t("formatting.sentence_case", { value: t(snakeCase(`status_${item.status}`)) })}
-                          </Badge>
-                        );
-                        return (
-                          <Table.Cell key={key}>
-                            {item.err
-                              ? (
-                                  <Tooltip content={item.err}>
-                                    {node}
-                                  </Tooltip>
-                                )
-                              : node}
-                          </Table.Cell>
-                        );
-                      }
-
-                      if (key === "type") {
-                        return <Table.Cell key={key}>{item.type.toUpperCase()}</Table.Cell>;
-                      }
-
-                      if (key === "plugin") {
-                        return (
-                          <Table.Cell key={key}>
-                            {PluginForm.mapping.find(plugin => plugin.key === item.plugin)?.label}
-                          </Table.Cell>
-                        );
-                      }
-
-                      return <Table.Cell key={key}>{item[key]}</Table.Cell>;
-                    })}
-                  </Table.Row>
-                </ContextMenu.Trigger>
-                <ContextMenu.Content>
-                  {item.name
-                    ? (
-                        <>
-                          <ContextMenu.Item className=":uno: pointer-events-none bg-[unset]! color-[--gray-a8]">
-                            {item.name}
-                          </ContextMenu.Item>
-                          <ContextMenu.Separator />
-                        </>
-                      )
-                    : null}
-                  <ContextMenu.Item onClick={() => {
-                    createEditDialogRef.current?.edit($proxy[1].execute(item.name)
-                      .then(proxy => ({
-                        ...proxy,
-                        // plugin: { type: proxy.plugin },
-                        _: {
-                          pluginEnable: !!proxy.plugin,
-                          transportEnable: !!proxy.transport,
-                          loadBalancerEnable: !!proxy.loadBalancer,
-                          healthCheckEnable: !!proxy.healthCheck,
-                        },
-                      })));
-                  }}
-                  >
-                    <IconTablerEdit />
-                    {t("formatting.upper_first", { value: t("edit") })}
-                  </ContextMenu.Item>
-                  <ContextMenu.Item
-                    color="red"
-                    onClick={() => {
-                      deleteDialogRef.current?.open(item);
-                    }}
-                  >
-                    <IconTablerTrash />
-                    {t("formatting.upper_first", { value: t("delete") })}
-                  </ContextMenu.Item>
-                </ContextMenu.Content>
-              </ContextMenu.Root>
-            ))}
-            {!list.length ? <TableEmpty /> : null}
-          </Table.Body>
-        </Table.Root>
-        <Text size="2" className=":uno: ml-a color-[--gray-indicator]">
-          {t("formatting.capital_case", { value: t("item_count", { count: list.length }) })}
-        </Text>
-      </Spinner>
-
-      <CreateEditDialog ref={createEditDialogRef} loading={$proxy[0].status === "loading"} />
-      <DeleteDialog
-        ref={deleteDialogRef}
-        onConfirm={() => {
-          $list[1].reset();
-          $list[1].execute();
-        }}
-      />
-    </Flex>
+    </div>
   );
 }

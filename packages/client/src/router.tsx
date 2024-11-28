@@ -1,5 +1,5 @@
 import path from "node:path";
-import { createHashRouter, Navigate, type RouteObject } from "react-router-dom";
+import { createBrowserRouter, Navigate, type RouteObject } from "react-router-dom";
 
 import App from "./app";
 // import ErrorBoundary from "./error-boundary";
@@ -22,7 +22,7 @@ const routes = Object.entries(
   } as RouteObject;
 });
 
-const Router = createHashRouter([
+const Router = createBrowserRouter([
   {
     path: "/",
     element: <App />,

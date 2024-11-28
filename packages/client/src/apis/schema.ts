@@ -184,3 +184,92 @@ export const proxySchema = z.discriminatedUnion("type", [
 } }).and(baseProxySchema);
 
 export type ProxySchemaType = z.infer<typeof proxySchema>;
+
+const configurationAuthSchema = z.object({
+  method: z.string(),
+  additionalScopes: z.enum(["HeartBeats", "NewWorkConns"]).array(),
+  token: z.string(),
+  oidc: z.object({
+    clientID: z.string(),
+    clientSecret: z.string(),
+    audience: z.string(),
+    scope: z.string(),
+    tokenEndpointURL: z.string(),
+    additionalEndpointParams: z
+      .array(z.array(z.string()))
+      .transform<string[][]>((value) => {
+        return value ? Object.fromEntries(value.filter(([key]) => !!key)) : [];
+      }),
+  }).partial(),
+}).partial();
+
+const configurationLogSchema = z.object({
+  to: z.string(),
+  level: z.enum(["trace", "debug", "info", "warn", "error"]),
+  maxDays: z.number(),
+  disablePrintColor: z.boolean(),
+}).partial();
+
+const configurationWebServerSchema = z.object({
+  addr: z.string().nullish(),
+  port: z.number(),
+  user: z.string().nullish(),
+  password: z.string().nullish(),
+  assetsDir: z.string().nullish(),
+  pprofEnable: z.boolean().nullish(),
+  tls: z.object({
+    certFile: z.string(),
+    keyFile: z.string(),
+    trustedCaFile: z.string().nullish(),
+    serverName: z.string().nullish(),
+  }).nullish(),
+});
+
+const configurationTransportSchema = z.object({
+  protocol: z.enum(["tcp", "kcp", "quic", "websocket", "wss"]),
+  dialServerTimeout: z.number(),
+  dialServerKeepalive: z.number(),
+  connectServerLocalIP: z.string(),
+  proxyURL: z.string(),
+  poolCount: z.number(),
+  tcpMux: z.boolean(),
+  tcpMuxKeepaliveInterval: z.number(),
+  quic: z.object({
+    keepalivePeriod: z.number(),
+    maxIdleTimeout: z.number(),
+    maxIncomingStreams: z.number(),
+  }).partial(),
+  heartbeatInterval: z.number(),
+  heartbeatTimeout: z.number(),
+  tls: z.object({
+    enable: z.boolean().nullish(),
+    disableCustomTLSFirstByte: z.boolean().nullish(),
+    certFile: z.string(),
+    keyFile: z.string(),
+    trustedCaFile: z.string().nullish(),
+    serverName: z.string().nullish(),
+  }),
+}).partial();
+
+export const configurationSchema = z.object({
+  auth: configurationAuthSchema,
+  user: z.string(),
+  serverAddr: z.string(),
+  serverPort: z.number().min(0).max(65535),
+  natHoleStunServer: z.string(),
+  dnsServer: z.string(),
+  loginFailExit: z.boolean(),
+  start: z.string().array(),
+  log: configurationLogSchema,
+  webServer: configurationWebServerSchema,
+  transport: configurationTransportSchema,
+  udpPacketSize: z.number(),
+  metadatas: z
+    .array(z.array(z.string()))
+    .transform<string[][]>((value) => {
+      return value ? Object.fromEntries(value.filter(([key]) => !!key)) : [];
+    }),
+  includes: z.string(),
+}).partial();
+
+export type ConfigurationSchemaType = z.infer<typeof configurationSchema>;

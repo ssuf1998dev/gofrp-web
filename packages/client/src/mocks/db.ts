@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 import { cloneDeep, pick } from "lodash-es";
 
-import { buildePlugin, buildeType, buildObject, buildString } from "./builders";
+import { buildePlugin, buildeType, buildObject, buildString, buildStrings } from "./builders";
 
 const db = {
   proxies: faker.helpers.multiple(() => {
@@ -46,6 +46,16 @@ const db = {
       healthCheck,
     };
   }, { count: { min: 10, max: 35 } }),
+  user: buildString(0.8),
+  serverAddr: faker.helpers.maybe(() => faker.internet.ipv4(), { probability: 0.8 }),
+  serverPort: faker.helpers.maybe(() => faker.internet.port(), { probability: 0.8 }),
+  natHoleStunServer: faker.helpers.maybe(() => faker.internet.ipv4(), { probability: 0.8 }),
+  dnsServer: faker.helpers.maybe(() => faker.internet.ipv4(), { probability: 0.8 }),
+  loginFailExit: faker.helpers.maybe(() => faker.datatype.boolean(), { probability: 0.8 }),
+  start: buildStrings(0.8),
+  udpPacketSize: faker.helpers.maybe(() => faker.number.int({ min: 1, max: 10000 }), { probability: 0.8 }),
+  metadatas: faker.helpers.maybe(() => buildObject(), { probability: 0.8 }),
+  includes: buildStrings(0.8),
 };
 
 const status = {

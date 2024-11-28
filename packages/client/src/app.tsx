@@ -84,9 +84,7 @@ export default function App() {
         </TabNav.Root>
       </Flex>
 
-      <div className=":uno: px-4 pt-6 pb-8 mx-a w-full min-w-2xl max-w-5xl box-border">
-        <Outlet />
-      </div>
+      <Outlet />
     </Grid>
   );
 }
