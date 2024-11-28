@@ -16,8 +16,8 @@ import { useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import CreateEditDialog from "./create-edit-dialog";
+import PluginForm from "./create-edit-dialog/form/plugin";
 import DeleteDialog from "./delete-dialog";
-import PluginForm from "./plugin-form";
 
 export default function Proxies() {
   const { t } = useTranslation();

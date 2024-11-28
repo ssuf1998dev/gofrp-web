@@ -12,11 +12,11 @@ import { get, set } from "lodash-es";
 import { forwardRef, useCallback, useImperativeHandle, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import BasicForm from "./basic-form";
-import HealthCheckForm from "./health-check";
-import LoadBalancerForm from "./load-balancer-form";
-import PluginForm from "./plugin-form";
-import TransportForm from "./transport-form";
+import BasicForm from "./form/basic";
+import HealthCheckForm from "./form/health-check";
+import LoadBalancerForm from "./form/load-balancer";
+import PluginForm from "./form/plugin";
+import TransportForm from "./form/transport";
 
 type EditData = ProxySchemaType & {
   _?: Partial<{
